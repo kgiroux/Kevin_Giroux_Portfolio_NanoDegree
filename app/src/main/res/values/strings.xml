@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Kevin Giroux Portfolio</string>
+    <string name="titleMainActivityStr">My Nanodegree Apps !</string>
+    <string name="mainPopularMoviesStr">POPULAR MOVIES</string>
+    <string name="mainStockHawkStr">STOCK HAWK</string>
+    <string name="mainBuildItBiggerStr">BUILD IT BIGGER</string>
+    <string name="mainMakeYourAppMaterialStr">MAKE YOU APP MATERIAL</string>
+    <string name="mainGoUbiquitousStr">GO UBIQUITOUS</string>
+    <string name="mainCapstoneStr">CAPSTONE</string>
+</resources>
