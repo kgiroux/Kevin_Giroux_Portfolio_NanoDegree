@@ -10,7 +10,6 @@
     tools:actionBarNavMode="standard"
     tools:context=".activity.MainActivity">
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,82 +24,69 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="20dp"/>
 
-    <Button
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/blank"
-        android:layout_marginTop="10dp"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/mainPopularMoviesStr"
-        android:id="@+id/mainPopularMovies"
-        android:layout_below="@+id/titleMainActivity"
-        android:layout_centerHorizontal="true" />
+    <ScrollView
+        android:layout_below="@id/titleMainActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/blank"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/mainStockHawkStr"
-        android:id="@+id/mainStockHawk"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/mainPopularMovies"
-        android:layout_alignLeft="@+id/mainPopularMovies"
-        android:layout_alignStart="@+id/mainPopularMovies" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/blank"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/mainBuildItBiggerStr"
-        android:id="@+id/mainBuildItBigger"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/mainStockHawk"
-        android:layout_alignLeft="@+id/mainStockHawk"
-        android:layout_alignStart="@+id/mainStockHawk" />
 
-    <Button
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/blank"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/mainMakeYourAppMaterialStr"
-        android:id="@+id/mainMakeYourAppMaterial"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/mainBuildItBigger"
-        android:layout_alignLeft="@+id/mainBuildItBigger"
-        android:layout_alignStart="@+id/mainBuildItBigger" />
+            <Button
+                style="@style/ButtonAppTheme"
+                android:text="@string/mainPopularMoviesStr"
+                android:id="@+id/mainPopularMovies"
+                android:layout_centerHorizontal="true" />
 
-    <Button
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/blank"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/mainGoUbiquitousStr"
-        android:id="@+id/mainGoUbiquitous"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/mainMakeYourAppMaterial"
-        android:layout_alignLeft="@+id/mainMakeYourAppMaterial"
-        android:layout_alignStart="@+id/mainMakeYourAppMaterial" />
+            <Button
+                style="@style/ButtonAppTheme"
+                android:text="@string/mainStockHawkStr"
+                android:id="@+id/mainStockHawk"
+                android:layout_below="@+id/mainPopularMovies"
+                android:layout_alignLeft="@+id/mainPopularMovies"
+                android:layout_alignStart="@+id/mainPopularMovies" />
 
-    <Button
-        android:background="@color/colorPrimaryDark"
-        android:backgroundTint="@color/colorPrimaryDark"
-        android:textColor="@color/blank"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="@string/mainCapstoneStr"
-        android:id="@+id/mainCapstone"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/mainGoUbiquitous"
-        android:layout_alignLeft="@+id/mainGoUbiquitous"
-        android:layout_alignStart="@+id/mainGoUbiquitous" />
+            <Button
+                style="@style/ButtonAppTheme"
+                android:text="@string/mainBuildItBiggerStr"
+                android:id="@+id/mainBuildItBigger"
+                android:layout_below="@+id/mainStockHawk"
+                android:layout_alignLeft="@+id/mainStockHawk"
+                android:layout_alignStart="@+id/mainStockHawk" />
+
+            <Button
+                style="@style/ButtonAppTheme"
+                android:text="@string/mainMakeYourAppMaterialStr"
+                android:id="@+id/mainMakeYourAppMaterial"
+                android:layout_below="@+id/mainBuildItBigger"
+                android:layout_alignLeft="@+id/mainBuildItBigger"
+                android:layout_alignStart="@+id/mainBuildItBigger" />
+
+            <Button
+                style="@style/ButtonAppTheme"
+                android:text="@string/mainGoUbiquitousStr"
+                android:id="@+id/mainGoUbiquitous"
+                android:layout_below="@+id/mainMakeYourAppMaterial"
+                android:layout_alignLeft="@+id/mainMakeYourAppMaterial"
+                android:layout_alignStart="@+id/mainMakeYourAppMaterial" />
+
+            <Button
+                style="@style/ButtonAppTheme"
+                android:text="@string/mainCapstoneStr"
+                android:id="@+id/mainCapstone"
+                android:layout_below="@+id/mainGoUbiquitous"
+                android:layout_alignLeft="@+id/mainGoUbiquitous"
+                android:layout_alignStart="@+id/mainGoUbiquitous" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+
 
 
 </RelativeLayout>
