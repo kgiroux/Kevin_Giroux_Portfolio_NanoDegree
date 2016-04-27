@@ -1,5 +1,6 @@
 package com.giroux.kevin.kevingirouxportfolio.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
+import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,9 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        String textToDisplay = "";
+        String textToDisplay;
+        Intent t = null;
         switch (v.getId()) {
             case R.id.mainPopularMovies:
+                t = new Intent(this, PopularActivity.class);
                 textToDisplay = "This button will launch my Popular Movies App";
                 break;
             case R.id.mainStockHawk:
@@ -63,10 +67,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 textToDisplay = "";
+                t = null;
                 break;
         }
         if (!textToDisplay.equals("")) {
             Toast.makeText(getApplicationContext(), textToDisplay, Toast.LENGTH_LONG).show();
         }
+        if(t != null)
+            startActivity(t);
     }
 }
