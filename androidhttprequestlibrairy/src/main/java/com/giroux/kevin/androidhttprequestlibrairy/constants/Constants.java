@@ -1,14 +1,22 @@
-package com.giroux.kevin.androidhttprequestlibrairy;
+package com.giroux.kevin.androidhttprequestlibrairy.constants;
 
 /**
  * Created by kevin on 18/04/2016. ForeCast Application
  */
 public class Constants {
 
+
+    public static final String TAG_MOVIE_TASK = "MOVIE TASK";
+
+    private Constants() throws InstantiationException{throw new InstantiationError();}
     public static final String TAG_ANDROID_HTTP_REQUEST = "Android HTTP request";
     public static final String DEFAULT_ENCODING_ANDROID_HTTP_REQUEST = "UTF-8";
     public static final int DEFAULT_TIMEOUT = 15000;
+    public static final int DEFAULT_SIZE = 4096;
     public static final String METHOD_POST = "POST";
+    public static final String METHOD_GET = "GET" ;
+    public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_DELETE = "DELETE";
     public static final String METHOD_RESULT_OK = "OK";
     public static final String CST_TIMEOUT ="Timeout for the request : {} with the parameter {} . Try to check the URL or increase the timeout value";
     public static final String CST_NO_CONTENT = "No content to return from the server";

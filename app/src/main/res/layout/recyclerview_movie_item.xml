@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/movie_item_picture"
+        android:src="@drawable/loadingspinner"
+        android:layout_width="wrap_content"
+        android:scaleType="fitCenter"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_below="@id/movie_item_picture"
+        android:id="@+id/movie_item_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

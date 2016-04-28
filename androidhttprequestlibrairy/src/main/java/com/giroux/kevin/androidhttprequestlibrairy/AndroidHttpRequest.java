@@ -5,12 +5,16 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
+import com.giroux.kevin.androidhttprequestlibrairy.constants.TypeMine;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,10 +36,21 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
     private int timeout;
     private String url;
     private String method;
-    private Map<String, Object> listUiUpdate;
+    private Map<String, Object> listObject;
     private Map<String, String> listParam;
     private String paramStr;
     private Uri.Builder builderURL;
+    private int sizeBuffer;
+
+    public TypeMine getTypeMine() {
+        return typeMine;
+    }
+
+    public void setTypeMine(TypeMine typeMine) {
+        this.typeMine = typeMine;
+    }
+
+    private TypeMine typeMine;
 
     public Map<String, String> getListParam() {
         return listParam;
@@ -57,20 +72,12 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         this.encoding = encoding;
     }
 
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
 
-    public void setListUiUpdate(Map<String, Object> listUiUpdate) {
-        this.listUiUpdate = listUiUpdate;
-    }
-
-    public Object getObject() {
-        return object;
+    public void setListObject(Map<String, Object> listObject) {
+        this.listObject = listObject;
     }
 
     public String getUrl() {
@@ -108,12 +115,12 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
     public AndroidHttpRequest(boolean isJSON, String encoding, Object object, int timeout, String url, String method, Map<String, String> paramStr) {
         this.setJSON(isJSON);
         this.setEncoding(encoding);
-        this.setObject(object);
+        this.object = (object);
         this.setTimeout(timeout);
         this.setUrl(url);
         this.setMethod(method);
         this.setListParam(paramStr);
-        this.setListUiUpdate(new HashMap<String,Object>());
+        this.setListObject(new HashMap<String,Object>());
         builderURL = new Uri.Builder();
     }
 
@@ -132,9 +139,11 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         this.encoding = Constants.DEFAULT_ENCODING_ANDROID_HTTP_REQUEST;
         this.timeout = Constants.DEFAULT_TIMEOUT;
         this.object = (null);
-        this.listUiUpdate = new HashMap<>();
+        this.listObject = new HashMap<>();
         this.listParam = (paramStr);
         builderURL = new Uri.Builder();
+        this.typeMine = TypeMine.APPLICATION_JSON;
+        this.sizeBuffer = Constants.DEFAULT_SIZE;
     }
 
     @Override
@@ -156,7 +165,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         displayParamaterForTheRequest();
         URL url;
         HttpURLConnection urlConnection = null;
-        JSONObject json = null;
+        Object object = null;
         OutputStream os;
 
         try {
@@ -172,10 +181,10 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
 
             //Send parameters
             urlConnection.setRequestMethod(this.method);
-            if (this.JSON)
-                urlConnection.setRequestProperty("Content-Type", "application/json; " + this.encoding);
-            else
-                urlConnection.setRequestProperty("Content-Type", "text; " + this.encoding);
+            /*if (this.JSON)
+                urlConnection.setRequestProperty("Content-Type", TypeMine.APPLICATION_JSON.toString() + this.encoding);
+            else*/
+            urlConnection.setRequestProperty("Content-Type", this.typeMine.toString() + this.encoding);
 
 
             if (this.method.equals(Constants.METHOD_POST)) {
@@ -191,29 +200,45 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
             }
             //Récupération des iformations de retour du serveur
             urlConnection.connect();
-            json = performedCheckCodeMessage(urlConnection);
+            object = performedCheckCodeMessage(urlConnection);
         } catch (IOException | JSONException ex ) {
             Log.e(Constants.TAG_ANDROID_HTTP_REQUEST, "Error decoding stream", ex);
         } finally {
             if (urlConnection != null)
                 urlConnection.disconnect();
         }
-        return json;
+        return object;
     }
 
-    private JSONObject performedCheckCodeMessage(HttpURLConnection urlConnection) throws IOException, JSONException{
+    private Object performedCheckCodeMessage(HttpURLConnection urlConnection) throws IOException, JSONException{
         InputStream in;
         String str;
-        JSONObject json = new JSONObject();
-        switch(urlConnection.getResponseCode()){
+        Object json= null;
+        switch(urlConnection.getResponseCode()) {
             //200
-            case HttpURLConnection.HTTP_OK :
-
-                Log.e(Constants.TAG_ANDROID_HTTP_REQUEST," Response OK");
+            case HttpURLConnection.HTTP_OK:
+                Log.e(Constants.TAG_ANDROID_HTTP_REQUEST, " Response OK");
                 in = new BufferedInputStream(urlConnection.getInputStream());
-                str = streamToString(in);
+                    urlConnection.getResponseMessage();
+                urlConnection.getContentType();
+                if (urlConnection.getContentType().equals(TypeMine.APPLICATION_JSON.toString() + ";charset=" + this.encoding.toLowerCase())){
+                    str = streamToString(in);
+                    json = new JSONObject(str);
+                }else if(urlConnection.getContentType().equals(TypeMine.IMAGE_JPEG.toString())){
+                    byte[] bytes =new byte[sizeBuffer];
+                    int bytesRead = 0;
+
+                    ByteArrayOutputStream bao = new ByteArrayOutputStream();
+
+                    while((bytesRead = in.read(bytes)) != -1) {
+                        bao.write(bytes, 0, bytesRead);
+                    }
+                    json = bao.toByteArray();
+                }else{
+                    str = streamToString(in);
+                    json = str;
+                }
                 in.close();
-                json = new JSONObject(str);
                 break;
             // 204
             case HttpURLConnection.HTTP_NO_CONTENT:
@@ -260,7 +285,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
                 ", timeout=" + timeout +
                 ", url='" + url + '\'' +
                 ", method='" + method + '\'' +
-                ", listUiUpdate=" + listUiUpdate +
+                ", listObject=" + listObject +
                 '}';
     }
 
@@ -272,7 +297,8 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
                 ", \nTimeout : " + timeout +
                 ", \nUrl : '" + url + '\'' +
                 ", \nMethod : '" + method + '\'' +
-                ", \nlistUiUpdate : '" + listUiUpdate + '\'';
+                ", \nparam : '" + paramStr + '\'' +
+                ", \nlistObject : '" + listObject + '\'';
         Log.d(Constants.TAG_ANDROID_HTTP_REQUEST, toDisplay);
     }
 
@@ -283,7 +309,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
      * @param value UI object that need to be update
      */
     public void addUIObjectToUpdate(String key, Object value) {
-        this.listUiUpdate.put(key, value);
+        this.listObject.put(key, value);
     }
 
 
@@ -291,10 +317,14 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         return method;
     }
 
+    public Map<String, Object> getListObject() {
+        return listObject;
+    }
+
     private Uri createParamString(Map<String, String> listParam) {
         Uri url = Uri.parse(this.getUrl());
         JSONObject object = new JSONObject();
-        builderURL.scheme(url.getScheme()).appendEncodedPath(url.getPath());
+       builderURL.scheme(url.getScheme()).appendEncodedPath(url.getPath());
         if(this.isJSON()){
             try{
 
@@ -307,13 +337,18 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
             }
         }else{
             for (Map.Entry<String, String> entrySet : listParam.entrySet()) {
-                builderURL.appendQueryParameter(entrySet.getKey(), entrySet.getValue()).build();
+                if(entrySet.getKey().equals("")){
+                    builderURL.appendEncodedPath(entrySet.getValue());
+                }else{
+                    builderURL.appendQueryParameter(entrySet.getKey(), entrySet.getValue()).build();
+                }
             }
 
         }
         if (this.getMethod().equals(Constants.METHOD_POST) && !this.isJSON()) {
             this.paramStr = builderURL.build().getQuery();
         } else if(!this.isJSON()){
+            builderURL.authority(url.getAuthority()).scheme(url.getScheme());
             this.paramStr = builderURL.build().getQuery();
             url = builderURL.authority(url.getAuthority()).build();
         }
