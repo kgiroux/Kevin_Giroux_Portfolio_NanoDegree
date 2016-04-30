@@ -81,7 +81,7 @@ public class PopularActivity extends AppCompatActivity implements SwipeRefreshLa
         String sortPref = preferences.getString(getString(R.string.pref_list_key),getString(R.string.pref_list_default));
 
         Map<String,String> urlParam = new HashMap<>();
-        urlParam.put("api_key","c31a455f61c0ef7088b1177843ce8372");
+        urlParam.put("api_key",getString(R.string.apiKey));
         urlParam.put("sort_by",sortPref);
         urlParam.put("","movie");
 

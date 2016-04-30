@@ -24,5 +24,7 @@
         <item>vote_average.desc</item>
     </string-array>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    
+    <string name="apiKey">YOUR API KEY HERE</string>
 
 </resources>
