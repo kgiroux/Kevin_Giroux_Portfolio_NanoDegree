@@ -72,6 +72,10 @@ public class MovieTask extends AndroidHttpRequest {
                 if(temp.has("backdrop_path")){
                     movieInformation.setBackdropPath(temp.getString("backdrop_path"));
                 }
+
+                if(temp.has("overview")){
+                    movieInformation.setOverView(temp.getString("overview"));
+                }
                 toReturn.add(movieInformation);
 
             }

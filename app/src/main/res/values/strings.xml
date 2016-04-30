@@ -7,4 +7,22 @@
     <string name="mainMakeYourAppMaterialStr">MAKE YOU APP MATERIAL</string>
     <string name="mainGoUbiquitousStr">GO UBIQUITOUS</string>
     <string name="mainCapstoneStr">CAPSTONE</string>
+    <string name="title_activity_settings">Settings</string>
+
+
+    <string name="pref_list_title">Sort research</string>
+    <string name="action_settings">Settings</string>
+    <string name="SearchOption">Search Option</string>
+    <string name="pref_list_key">orderSort</string>
+    <string name="pref_list_default">popularity.desc</string>
+    <string-array name="pref_list_titles">
+        <item>Most Popular</item>
+        <item>Highest Rated</item>
+    </string-array>
+    <string-array name="pref_list_values">
+        <item>popularity.desc</item>
+        <item>vote_average.desc</item>
+    </string-array>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+
 </resources>

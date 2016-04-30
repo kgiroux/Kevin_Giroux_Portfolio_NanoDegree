@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="0dp"
+    android:layout_margin="0dp">
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/movie_item_picture"
         android:src="@drawable/loadingspinner"
-        android:layout_width="wrap_content"
-        android:scaleType="fitCenter"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:layout_below="@id/movie_item_picture"
-        android:id="@+id/movie_item_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</RelativeLayout>
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:adjustViewBounds="true"
+        android:layout_margin="0dp" />
+</LinearLayout>

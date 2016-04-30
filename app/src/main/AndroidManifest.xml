@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.giroux.kevin.kevingirouxportfolio">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +17,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.popularMovies.PopularActivity"></activity>
+        <activity android:name=".activity.popularMovies.PopularActivity" />
+        <activity
+            android:name=".activity.popularMovies.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activity.popularMovies.PopularActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity" />
+        </activity>
+        <activity
+            android:name=".activity.popularMovies.MovieDetailActivity"
+            android:label="@string/title_activity_movie_detail"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

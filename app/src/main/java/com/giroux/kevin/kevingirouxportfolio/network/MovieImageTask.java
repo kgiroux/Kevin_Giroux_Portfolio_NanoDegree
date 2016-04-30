@@ -8,10 +8,9 @@ import android.widget.ImageView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
 import com.giroux.kevin.kevingirouxportfolio.ViewHolder.ViewHolderMovie;
+import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,13 +35,19 @@ public class MovieImageTask extends AndroidHttpRequest {
     protected void onPostExecute(Object o) {
 
         if(getListObject().get("ViewHolder") instanceof ViewHolderMovie){
+            ViewHolderMovie vh =  ((ViewHolderMovie) getListObject().get("ViewHolder"));
             if(o instanceof byte[]){
-                ImageView imageView = ((ViewHolderMovie) getListObject().get("ViewHolder")).getImageMovie();
+                ImageView imageView =vh.getImageMovie();
                 byte []bytes = (byte[])o;
                 BitmapDrawable bitmapDrawable = new BitmapDrawable(context.getResources(),BitmapFactory.decodeByteArray(bytes,0,bytes.length));
                 Bitmap image = bitmapDrawable.getBitmap();
-                if(image != null)
+                if(image != null){
                     imageView.setImageBitmap(bitmapDrawable.getBitmap());
+
+                    if(getListObject().get("listMovie") instanceof List){
+                        ((List<MovieInformation>)getListObject().get("listMovie")).get(vh.getMPosition()).setPosterBitmap(bytes);
+                    }
+                }
             }
         }
 

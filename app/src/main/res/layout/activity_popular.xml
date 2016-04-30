@@ -5,15 +5,18 @@
     android:layout_height="match_parent"
     tools:context="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/swipe_container"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        tools:listitem="@layout/recyclerview_movie_item"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/recyclerview_movie_item"
+            android:layout_height="wrap_content"
+            android:padding="0dp">
 
-
-
-    </android.support.v7.widget.RecyclerView>
-
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

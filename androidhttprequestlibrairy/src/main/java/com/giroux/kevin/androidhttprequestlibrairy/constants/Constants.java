@@ -7,6 +7,7 @@ public class Constants {
 
 
     public static final String TAG_MOVIE_TASK = "MOVIE TASK";
+    public static final String VIEW_HOLDER_MOVIE = "VIEW HOLDER MOVIE" ;
 
     private Constants() throws InstantiationException{throw new InstantiationError();}
     public static final String TAG_ANDROID_HTTP_REQUEST = "Android HTTP request";
