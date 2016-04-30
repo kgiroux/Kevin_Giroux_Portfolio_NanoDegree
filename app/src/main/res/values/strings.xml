@@ -14,17 +14,16 @@
     <string name="action_settings">Settings</string>
     <string name="SearchOption">Search Option</string>
     <string name="pref_list_key">orderSort</string>
-    <string name="pref_list_default">popularity.desc</string>
+    <string name="pref_list_default">popular</string>
     <string-array name="pref_list_titles">
         <item>Most Popular</item>
         <item>Highest Rated</item>
     </string-array>
     <string-array name="pref_list_values">
-        <item>popularity.desc</item>
-        <item>vote_average.desc</item>
+        <item>popular</item>
+        <item>top_rated</item>
     </string-array>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
-    
-    <string name="apiKey">YOUR API KEY HERE</string>
+    <string name="apiKey">c31a455f61c0ef7088b1177843ce8372</string>
 
 </resources>

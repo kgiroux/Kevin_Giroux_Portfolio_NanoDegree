@@ -1,11 +1,14 @@
 package com.giroux.kevin.kevingirouxportfolio.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by kevin on 28/04/2016. Kevin Giroux Portfolio
  */
-public class MovieInformation implements Serializable{
+public class MovieInformation implements Parcelable {
 
     private String originalTitle;
     private String overView;
@@ -80,8 +83,58 @@ public class MovieInformation implements Serializable{
         this.backdropPath = backdropPath;
     }
 
+    public MovieInformation(Parcel in) {
+       readFromParcel(in);
+    }
+
     public MovieInformation() {
 
     }
 
+    private void readFromParcel(Parcel in) {
+        title = in.readString();
+        originalTitle = in.readString();
+        releaseDate = in.readString();
+        overView = in.readString();
+        int size = in.readInt();
+        posterBitmap = new byte[size];
+        in.readByteArray(posterBitmap);
+        userRating = in.readDouble();
+        backdropPath = in.readString();
+        posterPath = in.readString();
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(originalTitle);
+        dest.writeString(releaseDate);
+        dest.writeString(overView);
+        dest.writeInt(posterBitmap.length);
+        dest.writeByteArray(posterBitmap);
+        dest.writeDouble(userRating);
+        dest.writeString(backdropPath);
+        dest.writeString(posterPath);
+    }
+
+    public static final Parcelable.Creator<MovieInformation> CREATOR
+            = new Parcelable.Creator<MovieInformation>() {
+
+        public MovieInformation createFromParcel(Parcel in) {
+            return new MovieInformation(in);
+        }
+
+        public MovieInformation[] newArray(int size) {
+            return new MovieInformation[size];
+        }
+    };
 }

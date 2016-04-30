@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -22,6 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class PopularActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     @Override
@@ -31,14 +35,13 @@ public class PopularActivity extends AppCompatActivity implements SwipeRefreshLa
     }
 
     private MovieAdapter movieAdapter;
-    private SwipeRefreshLayout layout;
+    @BindView(R.id.swipe_container) SwipeRefreshLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popular);
-        layout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-
+        ButterKnife.bind(this);
         if (layout != null) {
             layout.setOnRefreshListener(this);
             layout.setColorSchemeResources(
@@ -78,21 +81,21 @@ public class PopularActivity extends AppCompatActivity implements SwipeRefreshLa
     private void queryListFilm(){
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String sortPref = preferences.getString(getString(R.string.pref_list_key),getString(R.string.pref_list_default));
-
+        String preferencesString = preferences.getString(getString(R.string.pref_list_key),getString(R.string.pref_list_default));
+        Log.e(Constants.TAG_POPULAR_MOVIE,preferencesString);
         Map<String,String> urlParam = new HashMap<>();
         urlParam.put("api_key",getString(R.string.apiKey));
-        urlParam.put("sort_by",sortPref);
-        urlParam.put("","movie");
-
+        urlParam.put("",preferencesString);
         /*
             I create my own http Manager that can allow user to change the UI on the postMethod. We have just to create a class and extends it to AndroidHttpRequest.
             After done this, just implement the logic in the onPostResult
 
             This logic is for the moment only a prototype, and i would to have your mind on it
          */
-
-        MovieTask movieTask = new MovieTask("https://api.themoviedb.org/3/discover/", Constants.METHOD_GET,urlParam);
+        /*
+        https://api.themoviedb.org/3/movie/popular?api_key=c31a455f61c0ef7088b1177843ce8372
+         */
+        MovieTask movieTask = new MovieTask("https://api.themoviedb.org/3/movie/", Constants.METHOD_GET,urlParam);
         movieTask.setJSON(false);
         movieTask.addUIObjectToUpdate("adapter",movieAdapter);
         movieTask.execute();

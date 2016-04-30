@@ -14,6 +14,8 @@ import com.giroux.kevin.kevingirouxportfolio.network.MovieImageDetailsTask;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import pl.droidsonroids.gif.GifImageView;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -25,18 +27,18 @@ public class MovieDetailActivity extends AppCompatActivity {
         LoadImage();
     }
     private MovieInformation movieInformation;
-    private GifImageView gifImageView;
+    @BindView(R.id.movieDetail_imageView) GifImageView gifImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         /* We get the MovieInformation from the previous activity */
-        movieInformation = (MovieInformation)getIntent().getSerializableExtra("movieInformation");
+        movieInformation = getIntent().getParcelableExtra("movieInformation");
 
         /* We bind the ImageView for update the picture when we download the picture */
-        gifImageView = (GifImageView) findViewById(R.id.movieDetail_imageView);
         if(gifImageView != null)
             gifImageView.setImageResource(R.drawable.loadingspinner);
 

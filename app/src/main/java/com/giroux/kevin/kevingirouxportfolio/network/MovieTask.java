@@ -47,6 +47,7 @@ public class MovieTask extends AndroidHttpRequest {
             JSONArray object = o.getJSONArray("results");
             for(int i = 0; i<object.length(); i++){
                 JSONObject temp = object.getJSONObject(i);
+
                 MovieInformation movieInformation = new MovieInformation();
 
                 if(temp.has("poster_path")){
