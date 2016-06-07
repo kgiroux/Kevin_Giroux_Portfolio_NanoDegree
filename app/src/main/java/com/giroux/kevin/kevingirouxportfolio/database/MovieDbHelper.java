@@ -3,8 +3,9 @@ package com.giroux.kevin.kevingirouxportfolio.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.MovieEntry;
+
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.FavoriteEntry;
+import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.MovieEntry;
 /**
  * Created by kevin on 06/06/2016. Kevin Giroux Portfolio
  */
@@ -37,11 +38,19 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieEntry.TABLE_NAME +"(" + MovieEntry._ID + "), " +
                 "UNIQUE (" + FavoriteEntry.COLUMN_MOVIE_ID + ", " + FavoriteEntry.COLUMN_MOVIE_ID + ")" +
                 "ON CONFLICT REPLACE )";
+
+        db.execSQL(SQL_CREATE_MOVIE_TABLE);
+        db.execSQL(SQL_CREATE_FAVORITE_TABLE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS" + FavoriteEntry.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS" + MovieEntry.TABLE_NAME);
+        }
+        this.onCreate(db);
     }
 
 
