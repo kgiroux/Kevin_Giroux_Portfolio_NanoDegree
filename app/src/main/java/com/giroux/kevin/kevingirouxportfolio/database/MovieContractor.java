@@ -47,6 +47,15 @@ public class MovieContractor {
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static long getIdFromUri(Uri uri){
+            String idToReturn = uri.getQueryParameter(_ID);
+            if(idToReturn != null && idToReturn.length() > 0)
+                return Long.parseLong(idToReturn);
+            else
+                return 0;
+        }
+
     }
 
     public static final class FavoriteEntry implements BaseColumns {
