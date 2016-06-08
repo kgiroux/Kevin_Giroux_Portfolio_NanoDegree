@@ -2,6 +2,8 @@ package com.giroux.kevin.kevingirouxportfolio.activity.popularMovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -16,11 +18,13 @@ import android.view.MenuItem;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.adapter.MovieAdapter;
+import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -31,11 +35,39 @@ public class PopularActivity extends AppCompatActivity implements SwipeRefreshLa
     @Override
     protected void onStart() {
         super.onStart();
-        queryListFilm();
+        //queryListFilm();
     }
+
+    private static String[] MOVIE_COLUMNS = {
+            MovieContractor.MovieEntry._ID,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_TITLE,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_RELEASE_DATE,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_OVERVIEW,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_USER_RATING,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER_PATH,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_BACKDROP_PATH,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_SETTING,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_DATE_QUERY_MOVIEDB,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY
+    };
+
+    public static int COL_MOVIE_ID =0;
+    public static int COLUMN_MOVIE_ORIGINAL_TITLE =1;
+    public static int COLUMN_MOVIE_TITLE =2;
+    public static int COLUMN_MOVIE_RELEASE_DATE =3;
+    public static int COLUMN_MOVIE_OVERVIEW =4;
+    public static int COLUMN_MOVIE_USER_RATING =5;
+    public static int COLUMN_MOVIE_POSTER =6;
+    public static int COLUMN_MOVIE_POSTER_PATH =7;
+    public static int COLUMN_MOVIE_BACKDROP_PATH =8;
+    public static int COLUMN_MOVIE_SETTING =9;
+    public static int COLUMN_MOVIE_POPULARITY = 10;
 
     private MovieAdapter movieAdapter;
     @BindView(R.id.swipe_container) SwipeRefreshLayout layout;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +82,27 @@ public class PopularActivity extends AppCompatActivity implements SwipeRefreshLa
                     android.R.color.holo_orange_light,
                     android.R.color.holo_red_light);
         }
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
         if(recyclerView != null){
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2,GridLayoutManager.VERTICAL,false);
             recyclerView.setLayoutManager(layoutManager);
-            movieAdapter = new MovieAdapter(getApplicationContext(),new ArrayList<MovieInformation>());
-            recyclerView.setAdapter(movieAdapter);
+
+            if(getApplicationContext().getContentResolver() != null){
+                Uri uri = MovieContractor.MovieEntry.buildUriLastestMovies();
+                Cursor c = getApplicationContext().getContentResolver().query(uri,MOVIE_COLUMNS,null,null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
+                List<MovieInformation> MovieList = MovieContractor.MovieEntry.getDataFromCursor(c);
+
+
+
+                movieAdapter = new MovieAdapter(getApplicationContext(),MovieList);
+                recyclerView.setAdapter(movieAdapter);
+
+                if(c != null && c.getCount() == 0){
+                    queryListFilm();
+                }
+                if(c!= null)
+                    c.close();
+            }
+
         }
     }
 
@@ -97,6 +142,7 @@ public class PopularActivity extends AppCompatActivity implements SwipeRefreshLa
          */
         MovieTask movieTask = new MovieTask("https://api.themoviedb.org/3/movie/", Constants.METHOD_GET,urlParam);
         movieTask.setJSON(false);
+        movieTask.setContext(getApplicationContext());
         movieTask.addUIObjectToUpdate("adapter",movieAdapter);
         movieTask.execute();
     }

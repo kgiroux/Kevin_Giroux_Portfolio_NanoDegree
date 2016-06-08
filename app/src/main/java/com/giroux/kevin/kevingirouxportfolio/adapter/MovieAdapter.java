@@ -1,11 +1,15 @@
 package com.giroux.kevin.kevingirouxportfolio.adapter;
 
 import android.content.Context;
+import android.content.CursorLoader;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;

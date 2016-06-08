@@ -30,6 +30,12 @@
             android:name=".activity.popularMovies.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+
+        <provider
+            android:authorities="com.giroux.kevin.kevingirouxportfolio"
+            android:name=".database.MovieContentProvider" />
+
     </application>
 
 </manifest>

@@ -21,26 +21,36 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        final String SQL_CREATE_FAVORITE_TABLE = "CREATE TABLE " + FavoriteEntry.TABLE_NAME + "("+
+                FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                FavoriteEntry.COLUMN_FAVORITE_DATE + " REAL NOT NULL," +
+                FavoriteEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL," +
+                " FOREIGN KEY (" + FavoriteEntry.COLUMN_MOVIE_ID +") REFERENCES " +
+                MovieEntry.TABLE_NAME +"(" + MovieEntry._ID + "), " +
+                "UNIQUE (" + FavoriteEntry.COLUMN_MOVIE_ID + ", " + FavoriteEntry.COLUMN_MOVIE_ID + ")" +
+                " ON CONFLICT REPLACE )";
+
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieEntry.TABLE_NAME + "("+
                 MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE + " TEXT NOT NULL, "+
                 MovieEntry.COLUMN_MOVIE_OVERVIEW + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_MOVIE_POSTER_PATH + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " REAL NOT NULL, "+
+                MovieEntry.COLUMN_MOVIE_RELEASE_DATE + " TEXT NOT NULL, "+
                 MovieEntry.COLUMN_MOVIE_TITLE + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_MOVIE_USER_RATING + " REAL NOT NULL, "  +
+                MovieEntry.COLUMN_MOVIE_BACKDROP_PATH + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_MOVIE_SETTING + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_MOVIE_POSTER + " BLOP, " +
+                MovieEntry.COLUMN_MOVIE_DATE_QUERY_MOVIEDB + " REAL NOT NULL, " +
+                MovieEntry.COLUMN_MOVIE_POPULARITY + " REAL NOT NULL, " +
                 "UNIQUE (" + MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE + ", " + MovieEntry.COLUMN_MOVIE_TITLE + ")" +
-                "ON CONFLICT REPLACE )";
-        final String SQL_CREATE_FAVORITE_TABLE = "CREATE TABLE " + FavoriteEntry.TABLE_NAME + "("+
-                FavoriteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                FavoriteEntry.COLUMN_FAVORITE_DATE + " REAL NOT NULL," +
-                "FOREIGN KEY (" + FavoriteEntry.COLUMN_MOVIE_ID +") REFERENCES " +
-                MovieEntry.TABLE_NAME +"(" + MovieEntry._ID + "), " +
-                "UNIQUE (" + FavoriteEntry.COLUMN_MOVIE_ID + ", " + FavoriteEntry.COLUMN_MOVIE_ID + ")" +
-                "ON CONFLICT REPLACE )";
+                "  ON CONFLICT REPLACE )";
+
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
         db.execSQL(SQL_CREATE_FAVORITE_TABLE);
+
 
     }
 

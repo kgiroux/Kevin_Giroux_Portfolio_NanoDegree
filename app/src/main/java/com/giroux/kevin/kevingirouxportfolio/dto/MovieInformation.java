@@ -1,15 +1,18 @@
 package com.giroux.kevin.kevingirouxportfolio.dto;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
+import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 
 /**
  * Created by kevin on 28/04/2016. Kevin Giroux Portfolio
  */
 public class MovieInformation implements Parcelable {
 
+    private int id;
+    private String settings;
     private String originalTitle;
     private String overView;
     private String posterPath;
@@ -17,7 +20,25 @@ public class MovieInformation implements Parcelable {
     private String title;
     private Double userRating;
     private String backdropPath;
+    private Double popularity;
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Double popularity) {
+        this.popularity = popularity;
+    }
+
     private byte []  posterBitmap;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public byte [] getPosterBitmap() {
         return posterBitmap;
@@ -92,6 +113,7 @@ public class MovieInformation implements Parcelable {
     }
 
     private void readFromParcel(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         originalTitle = in.readString();
         releaseDate = in.readString();
@@ -113,6 +135,7 @@ public class MovieInformation implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(originalTitle);
         dest.writeString(releaseDate);
@@ -135,4 +158,30 @@ public class MovieInformation implements Parcelable {
             return new MovieInformation[size];
         }
     };
+
+    public String getSettings() {
+        return settings;
+    }
+
+    public void setSettings(String settings) {
+        this.settings = settings;
+    }
+
+    public ContentValues generateContentValuesFromMovieInformation(String settingValue, long dateQuery) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieContractor.MovieEntry._ID, this.getId());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE, this.getOriginalTitle());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_OVERVIEW, this.getOverView());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER_PATH, this.getPosterPath());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, this.getReleaseDate());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_TITLE, this.getTitle());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_USER_RATING, this.getUserRating());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_BACKDROP_PATH, this.getBackdropPath());
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_SETTING, settingValue);
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_DATE_QUERY_MOVIEDB, dateQuery);
+        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY,this.getPopularity());
+
+        return contentValues;
+
+    }
 }

@@ -23,7 +23,8 @@ public class MovieContentProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     static final int MOVIE = 100;
     static final int MOVIE_ALL = 101;
-    static final int MOVIE_BY_FAVORITE = 102;
+    static final int MOVIE_LASTEST = 102;
+    static final int MOVIE_BY_FAVORITE = 103;
     static final int FAVORITE = 150;
 
 
@@ -44,8 +45,10 @@ public class MovieContentProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContractor.CONTENT_AUTHORITY;
         matcher.addURI(authority, MovieContractor.PATH_MOVIE, MOVIE);
+        matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/lastest",MOVIE_LASTEST);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE + "/*", MOVIE_ALL);
-        matcher.addURI(authority, MovieContractor.PATH_FAVORITE, MOVIE_BY_FAVORITE);
+        matcher.addURI(authority, MovieContractor.PATH_FAVORITE, FAVORITE);
+        matcher.addURI(authority, MovieContractor.PATH_FAVORITE + "/*", MOVIE_BY_FAVORITE);
         return matcher;
     }
 
@@ -58,15 +61,23 @@ public class MovieContentProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         Cursor retCursor;
         switch (match){
+
             case MOVIE :
                 retCursor = getMovieById(uri,projection);
                 break;
             case MOVIE_ALL :
                 retCursor = getMovieAllMovie();
                 break;
+
+            case MOVIE_LASTEST :
+                retCursor = getLastestMovieOrder(uri,projection);
+                break;
+
             case MOVIE_BY_FAVORITE :
                 retCursor = getMovieByFavorite(projection);
                 break;
+
+            case FAVORITE :
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
 
@@ -86,9 +97,11 @@ public class MovieContentProvider extends ContentProvider {
             case MOVIE:
                 return MovieContractor.MovieEntry.CONTENT_TYPE;
             case MOVIE_ALL:
-                return MovieContractor.FavoriteEntry.CONTENT_TYPE;
+                return MovieContractor.MovieEntry.CONTENT_TYPE;
+            case MOVIE_LASTEST :
+                return MovieContractor.MovieEntry.CONTENT_TYPE;
             case MOVIE_BY_FAVORITE:
-                return MovieContractor.FavoriteEntry.CONTENT_TYPE;
+                return MovieContractor.MovieEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unkown uri : " + uri);
         }
@@ -157,6 +170,14 @@ public class MovieContentProvider extends ContentProvider {
         builder.setTables(MovieContractor.FavoriteEntry.TABLE_NAME + " INNER JOIN "
                 +  MovieContractor.MovieEntry.TABLE_NAME + "ON "+ MovieContractor.FavoriteEntry.COLUMN_MOVIE_ID + " = " + MovieContractor.MovieEntry._ID);
         return  builder.query(movieDbHelper.getReadableDatabase(),projection,null,null,null,null,null);
+    }
+
+    private Cursor getLastestMovieOrder(Uri uri, String [] projection){
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(MovieContractor.MovieEntry.TABLE_NAME);
+        return builder.query(movieDbHelper.getReadableDatabase(),projection,null,null,null,null, MovieContractor.MovieEntry.COLUMN_MOVIE_DATE_QUERY_MOVIEDB + " ASC", "20");
+
+
     }
 
 

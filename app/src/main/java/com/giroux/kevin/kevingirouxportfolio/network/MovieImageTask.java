@@ -1,5 +1,6 @@
 package com.giroux.kevin.kevingirouxportfolio.network;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
 import com.giroux.kevin.kevingirouxportfolio.ViewHolder.ViewHolderMovie;
+import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 
 import java.util.List;
@@ -45,7 +47,13 @@ public class MovieImageTask extends AndroidHttpRequest {
                     imageView.setImageBitmap(bitmapDrawable.getBitmap());
 
                     if(getListObject().get("listMovie") instanceof List){
-                        ((List<MovieInformation>)getListObject().get("listMovie")).get(vh.getMPosition()).setPosterBitmap(bytes);
+                        List<MovieInformation> movieInformationList = (List<MovieInformation>) getListObject().get("listMovie");
+                        movieInformationList.get(vh.getMPosition()).setPosterBitmap(bytes);
+                        // Updating the BLOP field into the database;
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER,movieInformationList.get(vh.getMPosition()).getPosterBitmap());
+                        context.getContentResolver().update(MovieContractor.MovieEntry.CONTENT_URI,contentValues, MovieContractor.MovieEntry._ID + "= ?", new String[] {Long.toString(movieInformationList.get(vh.getMPosition()).getId())});
+
                     }
                 }
             }

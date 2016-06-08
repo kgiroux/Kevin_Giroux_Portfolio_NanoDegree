@@ -173,7 +173,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
             url = new URL(uri.toString());
             this.setUrl(new URL(uri.toString()).toString());
             urlConnection = (HttpURLConnection) url.openConnection();
-
+            Log.d(Constants.TAG_ANDROID_HTTP_REQUEST,this.getUrl() + "    " + url);
             //Définition des paramètres de connexion
             urlConnection.setReadTimeout(this.timeout);
             urlConnection.setConnectTimeout(this.timeout);
