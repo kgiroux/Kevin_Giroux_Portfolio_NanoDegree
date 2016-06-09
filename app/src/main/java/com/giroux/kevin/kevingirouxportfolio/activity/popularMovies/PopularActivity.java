@@ -6,10 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
 
 public class PopularActivity extends AppCompatActivity {
+
+    private static boolean mTwoPane = false;
+    private String DETAILFRAGMENT_TAG = "DETAILFRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +21,20 @@ public class PopularActivity extends AppCompatActivity {
         setContentView(R.layout.activity_popular);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FrameLayout movieDetail = (FrameLayout) findViewById(R.id.movieDetail);
+        if(movieDetail != null){
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movieDetail, new DetailsActivityFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        }else{
+            mTwoPane = false;
+            getSupportActionBar().setElevation(0f);
+        }
+
     }
 
 

@@ -37,7 +37,11 @@
         <activity
             android:name=".activity.popularMovies.PopularActivity"
             android:label="@string/title_activity_popular2"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.popularMovies.DetailsActivity"
+            android:label="@string/title_activity_details"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
