@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
-import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity;
+import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 
 import java.util.ArrayList;
@@ -91,17 +91,17 @@ public class MovieContractor {
                 while(c.moveToNext()){
                     Log.i(Constants.TAG_MOVIE_CONTRACTOR,"Récupération des films");
                     MovieInformation movieInformation = new MovieInformation();
-                    movieInformation.setId(c.getInt(PopularActivity.COL_MOVIE_ID));
-                    movieInformation.setOriginalTitle(c.getString(PopularActivity.COLUMN_MOVIE_ORIGINAL_TITLE));
-                    movieInformation.setTitle(c.getString(PopularActivity.COLUMN_MOVIE_TITLE));
-                    movieInformation.setReleaseDate(c.getString(PopularActivity.COLUMN_MOVIE_RELEASE_DATE));
-                    movieInformation.setOverView(c.getString(PopularActivity.COLUMN_MOVIE_OVERVIEW));
-                    movieInformation.setUserRating(c.getDouble(PopularActivity.COLUMN_MOVIE_USER_RATING));
-                    movieInformation.setPosterBitmap(c.getBlob(PopularActivity.COLUMN_MOVIE_POSTER));
-                    movieInformation.setPosterPath(c.getString(PopularActivity.COLUMN_MOVIE_POSTER_PATH));
-                    movieInformation.setBackdropPath(c.getString(PopularActivity.COLUMN_MOVIE_BACKDROP_PATH));
-                    movieInformation.setSettings(c.getString(PopularActivity.COLUMN_MOVIE_SETTING));
-                    movieInformation.setPopularity(c.getDouble(PopularActivity.COLUMN_MOVIE_POPULARITY));
+                    movieInformation.setId(c.getInt(PopularActivityFragment.COL_MOVIE_ID));
+                    movieInformation.setOriginalTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_ORIGINAL_TITLE));
+                    movieInformation.setTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_TITLE));
+                    movieInformation.setReleaseDate(c.getString(PopularActivityFragment.COLUMN_MOVIE_RELEASE_DATE));
+                    movieInformation.setOverView(c.getString(PopularActivityFragment.COLUMN_MOVIE_OVERVIEW));
+                    movieInformation.setUserRating(c.getDouble(PopularActivityFragment.COLUMN_MOVIE_USER_RATING));
+                    movieInformation.setPosterBitmap(c.getBlob(PopularActivityFragment.COLUMN_MOVIE_POSTER));
+                    movieInformation.setPosterPath(c.getString(PopularActivityFragment.COLUMN_MOVIE_POSTER_PATH));
+                    movieInformation.setBackdropPath(c.getString(PopularActivityFragment.COLUMN_MOVIE_BACKDROP_PATH));
+                    movieInformation.setSettings(c.getString(PopularActivityFragment.COLUMN_MOVIE_SETTING));
+                    movieInformation.setPopularity(c.getDouble(PopularActivityFragment.COLUMN_MOVIE_POPULARITY));
 
                     movieInformationList.add(movieInformation);
                 }

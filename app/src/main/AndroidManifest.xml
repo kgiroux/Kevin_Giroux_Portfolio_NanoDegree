@@ -17,7 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.popularMovies.PopularActivity" />
         <activity
             android:name=".activity.popularMovies.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -29,13 +28,16 @@
         <activity
             android:name=".activity.popularMovies.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
-            android:authorities="com.giroux.kevin.kevingirouxportfolio"
-            android:name=".database.MovieContentProvider" />
+            android:name=".database.MovieContentProvider"
+            android:authorities="com.giroux.kevin.kevingirouxportfolio" />
 
+        <activity
+            android:name=".activity.popularMovies.PopularActivity"
+            android:label="@string/title_activity_popular2"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

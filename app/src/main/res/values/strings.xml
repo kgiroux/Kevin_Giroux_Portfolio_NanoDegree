@@ -25,5 +25,6 @@
     </string-array>
     <string name="title_activity_movie_detail">MovieDetailActivity</string>
     <string name="apiKey">c31a455f61c0ef7088b1177843ce8372</string>
+    <string name="title_activity_popular2">PopularActivity2</string>
 
 </resources>
