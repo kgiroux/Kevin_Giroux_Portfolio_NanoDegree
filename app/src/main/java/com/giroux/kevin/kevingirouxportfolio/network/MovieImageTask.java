@@ -52,7 +52,7 @@ public class MovieImageTask extends AndroidHttpRequest {
                         // Updating the BLOP field into the database;
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER,movieInformationList.get(vh.getMPosition()).getPosterBitmap());
-                        context.getContentResolver().update(MovieContractor.MovieEntry.CONTENT_URI,contentValues, MovieContractor.MovieEntry._ID + "= ?", new String[] {Long.toString(movieInformationList.get(vh.getMPosition()).getId())});
+                        context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformationList.get(vh.getMPosition()).getId()),contentValues,null,null);
 
                     }
                 }

@@ -40,6 +40,7 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
     SwipeRefreshLayout layout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    private boolean mTwoPane = false;
 
     private static String[] MOVIE_COLUMNS = {
             MovieContractor.MovieEntry._ID,
@@ -90,13 +91,16 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
 
+
+
             if (getActivity().getApplicationContext().getContentResolver() != null) {
                 Uri uri = MovieContractor.MovieEntry.buildUriLastestMovies();
                 Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
                 List<MovieInformation> MovieList = MovieContractor.MovieEntry.getDataFromCursor(c);
 
 
-                movieAdapter = new MovieAdapter(getActivity().getApplicationContext(), MovieList);
+                movieAdapter = new MovieAdapter(getActivity(), MovieList);
+                movieAdapter.setmTwoPane(mTwoPane);
                 recyclerView.setAdapter(movieAdapter);
 
                 if (c != null && c.getCount() == 0) {
@@ -148,5 +152,12 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
                 queryListFilm();
             }
         });
+    }
+
+    public void setmTwoPane(boolean mTwoPane){
+        this.mTwoPane = mTwoPane;
+        if(movieAdapter != null){
+            movieAdapter.setmTwoPane(mTwoPane);
+        }
     }
 }

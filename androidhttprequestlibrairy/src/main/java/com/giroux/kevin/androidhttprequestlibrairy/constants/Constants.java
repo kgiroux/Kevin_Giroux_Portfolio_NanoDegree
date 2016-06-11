@@ -10,6 +10,11 @@ public class Constants {
     public static final String VIEW_HOLDER_MOVIE = "VIEW HOLDER MOVIE" ;
     public static final String TAG_POPULAR_MOVIE = "POPULAR MOVIE";
     public static final String TAG_MOVIE_CONTRACTOR = "MOVIE_CONTRACTOR";
+    public static final String TAG_DETAILS_ACTIVITY = "DETAILS_ACTIVITY";
+    public static final String MOVIE_PROVIDER = "MOVIE_PROVIDER";
+    public static final String TAG_MOVIE_DETAIL_TASK = "MOVIE_DETAIL TASK";
+    public static final String TAG_MOVIE_TRAILER = "MOVIE TRAILER TASK" ;
+    public static final String TAG_MOVIE_REVIEWS = "MOVIE_REVIEWS_TASK";
 
     private Constants() throws InstantiationException{throw new InstantiationError();}
     public static final String TAG_ANDROID_HTTP_REQUEST = "Android HTTP request";

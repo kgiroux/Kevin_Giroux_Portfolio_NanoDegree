@@ -1,5 +1,6 @@
 package com.giroux.kevin.kevingirouxportfolio.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.TypeMine;
 import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.ViewHolder.ViewHolderMovie;
+import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieImageTask;
 
@@ -34,9 +36,15 @@ import java.util.Map;
 public class MovieAdapter extends RecyclerView.Adapter {
 
     private List<MovieInformation> listObjects;
-    private Context context;
-    public MovieAdapter(Context context, List<MovieInformation> listObjects){
-        this.context = context;
+    private Activity mActivtiy;
+    private boolean mTwoPane;
+
+    public void setmTwoPane(boolean mTwoPane) {
+        this.mTwoPane = mTwoPane;
+    }
+
+    public MovieAdapter(Activity activtiy, List<MovieInformation> listObjects){
+        this.mActivtiy = activtiy;
         this.listObjects = listObjects;
     }
 
@@ -50,7 +58,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
         if(holder instanceof ViewHolderMovie) {
             ImageView imageView = ((ViewHolderMovie) holder).getImageMovie();
             if (listObjects.get(position).getPosterBitmap() != null){
-                imageView.setImageBitmap(new BitmapDrawable(context.getResources(), BitmapFactory.decodeByteArray(listObjects.get(position).getPosterBitmap(),0,listObjects.get(position).getPosterBitmap().length)).getBitmap());
+                imageView.setImageBitmap(new BitmapDrawable(mActivtiy.getApplicationContext().getResources(), BitmapFactory.decodeByteArray(listObjects.get(position).getPosterBitmap(),0,listObjects.get(position).getPosterBitmap().length)).getBitmap());
             }else{
                 /* We have load the information with the MovieTask, It is time to load the picture Poster for the rendering */
                 imageView.setImageResource(R.drawable.loadingspinner);
@@ -58,14 +66,15 @@ public class MovieAdapter extends RecyclerView.Adapter {
                 urlParams.put("",listObjects.get(position).getPosterPath());
                 MovieImageTask movieImageTask = new MovieImageTask("http://image.tmdb.org/t/p/w500/", Constants.METHOD_GET,urlParams);
                 movieImageTask.setJSON(false);
-                movieImageTask.setContext(this.context);
+                movieImageTask.setContext(this.mActivtiy.getApplicationContext());
                 movieImageTask.setTypeMine(TypeMine.IMAGE_WEBP);
                 movieImageTask.addUIObjectToUpdate("ViewHolder",holder);
                 movieImageTask.addUIObjectToUpdate("listMovie",listObjects);
                 movieImageTask.execute();
             }
             ((ViewHolderMovie)holder).setMPosition(position);
-            ((ViewHolderMovie)holder).setContext(this.context);
+            ((ViewHolderMovie)holder).setmTwoPane(this.mTwoPane);
+            ((ViewHolderMovie)holder).setActivity(this.mActivtiy);
             ((ViewHolderMovie)holder).setMovieInformation(listObjects.get(position));
             ((ViewHolderMovie)holder).getImageMovie().setContentDescription(listObjects.get(position).getTitle());
         }

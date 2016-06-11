@@ -73,12 +73,12 @@ public class MovieContractor {
         }
 
         public static Uri buildUriLastestMovies(){
-            return CONTENT_URI.buildUpon().appendEncodedPath("/lastest").build();
+            return CONTENT_URI.buildUpon().appendEncodedPath("lastest").build();
         }
 
 
         public static long getIdFromUri(Uri uri){
-            String idToReturn = uri.getQueryParameter(_ID);
+            String idToReturn = uri.getPathSegments().get(1);
             if(idToReturn != null && idToReturn.length() > 0)
                 return Long.parseLong(idToReturn);
             else
@@ -89,7 +89,6 @@ public class MovieContractor {
             List<MovieInformation> movieInformationList = new ArrayList<>();
             if(c != null){
                 while(c.moveToNext()){
-                    Log.i(Constants.TAG_MOVIE_CONTRACTOR,"Récupération des films");
                     MovieInformation movieInformation = new MovieInformation();
                     movieInformation.setId(c.getInt(PopularActivityFragment.COL_MOVIE_ID));
                     movieInformation.setOriginalTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_ORIGINAL_TITLE));

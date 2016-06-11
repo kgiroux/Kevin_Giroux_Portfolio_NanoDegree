@@ -27,5 +27,6 @@
     <string name="apiKey">c31a455f61c0ef7088b1177843ce8372</string>
     <string name="title_activity_popular2">PopularActivity2</string>
     <string name="title_activity_details">DetailsActivity</string>
+    <string name="markasfavorite">Mark as Favorite</string>
 
 </resources>

@@ -14,18 +14,24 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_movie_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+            Bundle arguments = new Bundle();
+            arguments.putParcelable(DetailsActivityFragment.DETAIL_URI, getIntent().getData());
+
+            DetailsActivityFragment fragment = new DetailsActivityFragment();
+            fragment.setArguments(arguments);
+
+            if(findViewById(R.id.movieDetail) != null)
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movieDetail, fragment)
+                        .commit();
+        }
     }
 
 }

@@ -1,16 +1,17 @@
 package com.giroux.kevin.kevingirouxportfolio.activity.popularMovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-
 import com.giroux.kevin.kevingirouxportfolio.R;
+import com.giroux.kevin.kevingirouxportfolio.interfaces.OnCustomItemClickListener;
 
-public class PopularActivity extends AppCompatActivity {
+public class PopularActivity extends AppCompatActivity implements OnCustomItemClickListener{
 
     private static boolean mTwoPane = false;
     private String DETAILFRAGMENT_TAG = "DETAILFRAGMENT";
@@ -34,6 +35,8 @@ public class PopularActivity extends AppCompatActivity {
             mTwoPane = false;
             getSupportActionBar().setElevation(0f);
         }
+        PopularActivityFragment ff = (PopularActivityFragment)getSupportFragmentManager().findFragmentById(R.id.idMovieFragment);
+        ff.setmTwoPane(!mTwoPane);
 
     }
 
@@ -56,4 +59,25 @@ public class PopularActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(Uri uri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(DetailsActivityFragment.DETAIL_URI, uri);
+
+            DetailsActivityFragment fragment = new DetailsActivityFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movieDetail, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailsActivity.class)
+                    .setData(uri);
+            startActivity(intent);
+        }
+    }
 }

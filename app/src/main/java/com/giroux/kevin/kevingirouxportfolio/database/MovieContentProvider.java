@@ -10,7 +10,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
 
 /**
@@ -25,6 +27,7 @@ public class MovieContentProvider extends ContentProvider {
     static final int MOVIE_ALL = 101;
     static final int MOVIE_LASTEST = 102;
     static final int MOVIE_BY_FAVORITE = 103;
+    static final int MOVIE_INSERT = 104;
     static final int FAVORITE = 150;
 
 
@@ -44,9 +47,10 @@ public class MovieContentProvider extends ContentProvider {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContractor.CONTENT_AUTHORITY;
-        matcher.addURI(authority, MovieContractor.PATH_MOVIE, MOVIE);
+        matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/#" , MOVIE);
         matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/lastest",MOVIE_LASTEST);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE + "/*", MOVIE_ALL);
+        matcher.addURI(authority, MovieContractor.PATH_MOVIE , MOVIE_INSERT);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE, FAVORITE);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE + "/*", MOVIE_BY_FAVORITE);
         return matcher;
@@ -94,6 +98,8 @@ public class MovieContentProvider extends ContentProvider {
     public String getType(@NonNull final Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
+            case MOVIE_INSERT :
+                return MovieContractor.MovieEntry.CONTENT_TYPE;
             case MOVIE:
                 return MovieContractor.MovieEntry.CONTENT_TYPE;
             case MOVIE_ALL:
@@ -115,7 +121,7 @@ public class MovieContentProvider extends ContentProvider {
         Uri returnUri;
 
         switch (match) {
-            case MOVIE: {
+            case MOVIE_INSERT: {
                 long _id = db.insert(MovieContractor.MovieEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = MovieContractor.MovieEntry.buildMovieUri(_id);
@@ -245,7 +251,7 @@ public class MovieContentProvider extends ContentProvider {
         final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case MOVIE:
+            case MOVIE_INSERT:
                 db.beginTransaction();
                 int returnCount = 0;
                 try {
