@@ -122,10 +122,12 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         String preferencesString = preferences.getString(getString(R.string.pref_list_key),getString(R.string.pref_list_default));
-        Log.e(Constants.TAG_POPULAR_MOVIE,preferencesString);
-        Map<String,String> urlParam = new HashMap<>();
-        urlParam.put("api_key",getString(R.string.apiKey));
-        urlParam.put("",preferencesString);
+
+        if(!preferencesString.equals(getString(R.string.pref_list_exclude))){
+            Log.e(Constants.TAG_POPULAR_MOVIE,preferencesString);
+            Map<String,String> urlParam = new HashMap<>();
+            urlParam.put("api_key",getString(R.string.apiKey));
+            urlParam.put("",preferencesString);
         /*
             I create my own http Manager that can allow user to change the UI on the postMethod. We have just to create a class and extends it to AndroidHttpRequest.
             After done this, just implement the logic in the onPostResult
@@ -135,11 +137,15 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
         /*
         https://api.themoviedb.org/3/movie/popular?api_key=c31a455f61c0ef7088b1177843ce8372
          */
-        MovieTask movieTask = new MovieTask("https://api.themoviedb.org/3/movie/", Constants.METHOD_GET,urlParam);
-        movieTask.setJSON(false);
-        movieTask.setContext(getActivity().getApplicationContext());
-        movieTask.addUIObjectToUpdate("adapter",movieAdapter);
-        movieTask.execute();
+            MovieTask movieTask = new MovieTask("https://api.themoviedb.org/3/movie/", Constants.METHOD_GET,urlParam);
+            movieTask.setJSON(false);
+            movieTask.setContext(getActivity().getApplicationContext());
+            movieTask.addUIObjectToUpdate("adapter",movieAdapter);
+            movieTask.execute();
+        }else{
+
+        }
+
     }
 
     @Override

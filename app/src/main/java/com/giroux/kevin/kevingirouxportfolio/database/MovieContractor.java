@@ -2,6 +2,7 @@ package com.giroux.kevin.kevingirouxportfolio.database;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -29,6 +30,72 @@ public class MovieContractor {
 
     public static final String PATH_FAVORITE = "favorite";
 
+    public static final String PATH_TRAILER = "trailer";
+
+    public static final String PATH_REVIEW = "review";
+
+    public static final class TrailerEntry implements BaseColumns {
+        public static final String TABLE_NAME ="trailer";
+
+        public static final String COLUMN_TRAILER_IS_YOUTUBE = "isYoutube";
+
+        public static final String COLUMN_TRAILER_KEY_YOUTUBE = "youtubeKey";
+
+        public static final String COLUMN_TRAILER_NAME = "name";
+
+        public static final String COLUMN_TRAILER_TYPE = "type";
+
+        public static final String COLUMN_TRAILER_MOVIE_ID = "idMovie";
+
+        // Content URI
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRAILER).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRAILER;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TRAILER;
+
+
+
+        public static Uri buildTrailerUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildTrailerUriFromMovieId(long idMovie){
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(idMovie)).build();
+        }
+    }
+
+    public static final class ReviewEntry implements BaseColumns{
+
+        public static final String TABLE_NAME ="reviews";
+
+        public static final String COLUMN_REVIEWS_NAME = "name_reviewer";
+
+        public static final String COLUMN_REVIEWS_CONTENT = "content_reviews";
+
+        public static final String COLUMN_REVIEWS_ID_MOVIE = "idMovie";
+
+        // Content URI
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_REVIEW).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_REVIEW;
+
+
+
+        public static Uri buildTrailerUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildReviewUriFromMovieId(long idMovie){
+            return CONTENT_URI.buildUpon().appendPath(Long.toString(idMovie)).build();
+        }
+
+    }
+
     public static final class MovieEntry implements BaseColumns {
         // Table name
         public static final String TABLE_NAME = "movie";
@@ -54,6 +121,8 @@ public class MovieContractor {
         public static final String COLUMN_MOVIE_DATE_QUERY_MOVIEDB = "date_query_moviedb";
         // Movie popularity
         public static final String COLUMN_MOVIE_POPULARITY = "popularity";
+        // Movie duration
+        public static final String COLUMN_MOVIE_DURATION = "duration";
 
 
         // Content URI
@@ -91,6 +160,9 @@ public class MovieContractor {
                 while(c.moveToNext()){
                     MovieInformation movieInformation = new MovieInformation();
                     movieInformation.setId(c.getInt(PopularActivityFragment.COL_MOVIE_ID));
+
+
+
                     movieInformation.setOriginalTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_ORIGINAL_TITLE));
                     movieInformation.setTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_TITLE));
                     movieInformation.setReleaseDate(c.getString(PopularActivityFragment.COLUMN_MOVIE_RELEASE_DATE));
@@ -101,7 +173,7 @@ public class MovieContractor {
                     movieInformation.setBackdropPath(c.getString(PopularActivityFragment.COLUMN_MOVIE_BACKDROP_PATH));
                     movieInformation.setSettings(c.getString(PopularActivityFragment.COLUMN_MOVIE_SETTING));
                     movieInformation.setPopularity(c.getDouble(PopularActivityFragment.COLUMN_MOVIE_POPULARITY));
-
+                    Log.d(Constants.TAG_POPULAR_MOVIE,movieInformation.toString());
                     movieInformationList.add(movieInformation);
                 }
             }
@@ -129,5 +201,12 @@ public class MovieContractor {
             return CONTENT_URI.buildUpon().appendPath(Long.toString(idMovie)).build();
         }
 
+
+        public static ContentValues buildContentValue(int idMovie){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_FAVORITE_DATE,System.currentTimeMillis());
+            contentValues.put(COLUMN_MOVIE_ID,idMovie);
+            return contentValues;
+        }
     }
 }

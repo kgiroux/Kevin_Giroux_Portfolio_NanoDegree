@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 
+import java.util.Arrays;
+
 /**
  * Created by kevin on 28/04/2016. Kevin Giroux Portfolio
  */
@@ -42,6 +44,23 @@ public class MovieInformation implements Parcelable {
 
     public byte [] getPosterBitmap() {
         return posterBitmap;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieInformation{" +
+                "id=" + id +
+                ", settings='" + settings + '\'' +
+                ", originalTitle='" + originalTitle + '\'' +
+                ", overView='" + overView + '\'' +
+                ", posterPath='" + posterPath + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", title='" + title + '\'' +
+                ", userRating=" + userRating +
+                ", backdropPath='" + backdropPath + '\'' +
+                ", popularity=" + popularity +
+                ", posterBitmap=" + Arrays.toString(posterBitmap) +
+                '}';
     }
 
     public void setPosterBitmap(byte [] posterBitmap) {

@@ -15,6 +15,8 @@ public class Constants {
     public static final String TAG_MOVIE_DETAIL_TASK = "MOVIE_DETAIL TASK";
     public static final String TAG_MOVIE_TRAILER = "MOVIE TRAILER TASK" ;
     public static final String TAG_MOVIE_REVIEWS = "MOVIE_REVIEWS_TASK";
+    public static final String TAG_WELCOME_ACTIVITY = "WELCOME ACTIVITY";
+    public static final String MOVIE_ADAPTER ="Movie Adapter" ;
 
     private Constants() throws InstantiationException{throw new InstantiationError();}
     public static final String TAG_ANDROID_HTTP_REQUEST = "Android HTTP request";

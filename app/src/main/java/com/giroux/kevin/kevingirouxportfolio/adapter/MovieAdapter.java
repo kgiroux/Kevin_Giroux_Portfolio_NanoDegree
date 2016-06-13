@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
         if(holder instanceof ViewHolderMovie) {
             ImageView imageView = ((ViewHolderMovie) holder).getImageMovie();
             if (listObjects.get(position).getPosterBitmap() != null){
+                displayListObject();
                 imageView.setImageBitmap(new BitmapDrawable(mActivtiy.getApplicationContext().getResources(), BitmapFactory.decodeByteArray(listObjects.get(position).getPosterBitmap(),0,listObjects.get(position).getPosterBitmap().length)).getBitmap());
             }else{
                 /* We have load the information with the MovieTask, It is time to load the picture Poster for the rendering */
@@ -89,6 +91,12 @@ public class MovieAdapter extends RecyclerView.Adapter {
         if(list != null){
             this.listObjects = list;
             notifyDataSetChanged();
+        }
+    }
+
+    private void displayListObject(){
+        for(MovieInformation m: listObjects){
+            Log.e(Constants.MOVIE_ADAPTER, m.toString());
         }
     }
 

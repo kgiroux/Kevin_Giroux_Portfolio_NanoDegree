@@ -1,6 +1,9 @@
 package com.giroux.kevin.kevingirouxportfolio.activity.popularMovies;
 
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.TypeMine;
@@ -31,18 +36,22 @@ import pl.droidsonroids.gif.GifImageView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class DetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    private final int DETAIL_LOADER = 0;
+    private final int DETAIL_LOADER = 1;
     public static String DETAIL_URI = "Detail Activity Movie";
     private Uri mUri;
     private MovieInformation movieInformation;
     @BindView(R.id.movieDetail_imageView)
     GifImageView gifImageView;
+    @BindView(R.id.movie_item_picture)
+    GifImageView gifPoster;
     @BindView(R.id.movieDetail_title) TextView titleTv;
     @BindView(R.id.yearTextView) TextView yearTv;
     @BindView(R.id.durationTextView) TextView durationTv;
     @BindView(R.id.ratingTextView) TextView ratingTv;
+    @BindView(R.id.markAsFavorite)
+    Button markAsFavorite;
 
 
     private static String[] MOVIE_COLUMNS = {
@@ -72,11 +81,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         setHasOptionsMenu(true);
     }
 
-    /*@Override
-    public void onStart() {
-        super.onStart();
-        LoadImage();
-    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,6 +94,9 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
         View root = inflater.inflate(R.layout.activity_movie_detail, container, false);
         ButterKnife.bind(this, root);
+
+        markAsFavorite.setOnClickListener(this);
+
         return root;
     }
 
@@ -117,6 +124,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     }
 
+    private void LoadTrailer() {
+
+    }
+
+    private void LoadReviews() {
+
+    }
+
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if ( null != mUri ) {
@@ -140,14 +156,19 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
          /* We bind the ImageView for update the picture when we download the picture */
         if (gifImageView != null)
             gifImageView.setImageResource(R.drawable.loadingspinner);
-        movieInformation = (MovieContractor.MovieEntry.getDataFromCursor(data)).get(0);
-        LoadImage();
-        /* We format informations for adding them to the activity */
-        if (titleTv != null)
-            titleTv.setText(movieInformation.getTitle());
+        if (!MovieContractor.MovieEntry.getDataFromCursor(data).isEmpty()) {
+            movieInformation = (MovieContractor.MovieEntry.getDataFromCursor(data)).get(0);
+            LoadImage();
+            /* We format informations for adding them to the activity */
+            if (titleTv != null)
+                titleTv.setText(movieInformation.getTitle());
 
-        if (yearTv != null)
-            yearTv.setText(movieInformation.getReleaseDate());
+            if (yearTv != null)
+                yearTv.setText(movieInformation.getReleaseDate());
+
+            if (gifPoster != null) {
+                gifPoster.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getPosterBitmap(), 0, movieInformation.getPosterBitmap().length)).getBitmap());
+            }
 
         /*if (durationTv != null)
             durationTv.setText(movieInformation);
@@ -156,9 +177,14 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             titleTv.setText(movieInformation.getTitle());*/
 
         /* We change the title for the activity by the name of the movie */
-        getActivity().setTitle(movieInformation.getTitle());
-        // UI
+
+            // UI
+            getActivity().setTitle(movieInformation.getTitle());
+        }
+
     }
+
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -169,5 +195,24 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.markAsFavorite:
+                markasFavorite();
+                break;
+        }
+    }
+
+    private void markasFavorite() {
+        if (movieInformation == null)
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccured), Toast.LENGTH_LONG).show();
+        else {
+            Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie(movieInformation.getId());
+            ContentValues contentValues = MovieContractor.FavoriteEntry.buildContentValue(movieInformation.getId());
+            getContext().getContentResolver().insert(uri, contentValues);
+        }
     }
 }
