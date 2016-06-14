@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
+import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.DetailsActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 
@@ -123,6 +124,8 @@ public class MovieContractor {
         public static final String COLUMN_MOVIE_POPULARITY = "popularity";
         // Movie duration
         public static final String COLUMN_MOVIE_DURATION = "duration";
+        // Movie markAsFavorite
+        public static final String COLUMN_MOVIE_MARK_AS_FAVORITE ="markAsFavorite";
 
 
         // Content URI
@@ -175,6 +178,31 @@ public class MovieContractor {
             }
             return movieInformationList;
         }
+
+        public static List<MovieInformation> getAllDataFromCursor(Cursor c) {
+            List<MovieInformation> movieInformationList = new ArrayList<>();
+            if(c != null){
+                while(c.moveToNext()){
+                    MovieInformation movieInformation = new MovieInformation();
+                    movieInformation.setId(c.getInt(DetailsActivityFragment.COL_MOVIE_ID));
+                    movieInformation.setOriginalTitle(c.getString(DetailsActivityFragment.COLUMN_MOVIE_ORIGINAL_TITLE));
+                    movieInformation.setTitle(c.getString(DetailsActivityFragment.COLUMN_MOVIE_TITLE));
+                    movieInformation.setReleaseDate(c.getString(DetailsActivityFragment.COLUMN_MOVIE_RELEASE_DATE));
+                    movieInformation.setOverView(c.getString(DetailsActivityFragment.COLUMN_MOVIE_OVERVIEW));
+                    movieInformation.setUserRating(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_USER_RATING));
+                    movieInformation.setPosterBitmap(c.getBlob(DetailsActivityFragment.COLUMN_MOVIE_POSTER));
+                    movieInformation.setPosterPath(c.getString(DetailsActivityFragment.COLUMN_MOVIE_POSTER_PATH));
+                    movieInformation.setBackdropPath(c.getString(DetailsActivityFragment.COLUMN_MOVIE_BACKDROP_PATH));
+                    movieInformation.setSettings(c.getString(DetailsActivityFragment.COLUMN_MOVIE_SETTING));
+                    movieInformation.setPopularity(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_POPULARITY));
+                    movieInformation.setMarkAsFavorite(c.getInt(DetailsActivityFragment.COLUMN_MOVIE_MARK_AS_FAVORITE));
+                    movieInformation.setDuration(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_DURATION));
+                    movieInformation.setDate_query_db(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_DATE_QUERY_MOVIEDB));
+                    movieInformationList.add(movieInformation);
+                }
+            }
+            return movieInformationList;
+        }
     }
 
     public static final class FavoriteEntry implements BaseColumns {
@@ -193,8 +221,8 @@ public class MovieContractor {
             return ContentUris.withAppendedId(CONTENT_URI,id);
         }
         
-        public static Uri buildFavoriteByIdMovie(long idMovie){
-            return CONTENT_URI.buildUpon().appendPath(Long.toString(idMovie)).build();
+        public static Uri buildFavoriteByIdMovie(){
+            return CONTENT_URI.buildUpon().appendEncodedPath("*").build();
         }
 
 

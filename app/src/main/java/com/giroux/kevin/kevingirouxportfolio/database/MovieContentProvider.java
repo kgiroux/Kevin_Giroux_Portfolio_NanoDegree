@@ -173,8 +173,11 @@ public class MovieContentProvider extends ContentProvider {
 
     private Cursor getMovieByFavorite(String[] projection) {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(MovieContractor.MovieEntry.TABLE_NAME + " INNER JOIN " + MovieContractor.FavoriteEntry.TABLE_NAME);
+       // String whereClause = MovieContractor.MovieEntry.TABLE_NAME+"."+MovieContractor.MovieEntry._ID + " = ?";
+       // String whereArg[] = new String[]{MovieContractor.FavoriteEntry.TABLE_NAME + "." + MovieContractor.FavoriteEntry.COLUMN_MOVIE_ID};
         builder.setTables(MovieContractor.FavoriteEntry.TABLE_NAME + " INNER JOIN "
-                +  MovieContractor.MovieEntry.TABLE_NAME + "ON "+ MovieContractor.FavoriteEntry.COLUMN_MOVIE_ID + " = " + MovieContractor.MovieEntry._ID);
+                +  MovieContractor.MovieEntry.TABLE_NAME + " ON "+ MovieContractor.FavoriteEntry.COLUMN_MOVIE_ID + " = " + MovieContractor.MovieEntry.TABLE_NAME+"."+MovieContractor.MovieEntry._ID);
         return  builder.query(movieDbHelper.getReadableDatabase(),projection,null,null,null,null,null);
     }
 

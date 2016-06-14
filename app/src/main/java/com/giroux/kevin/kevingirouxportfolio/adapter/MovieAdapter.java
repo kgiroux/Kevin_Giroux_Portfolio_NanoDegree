@@ -86,7 +86,7 @@ public class MovieAdapter extends RecyclerView.Adapter {
         return listObjects.size();
     }
 
-    public void setDate(List<MovieInformation> list){
+    public void setData(List<MovieInformation> list){
         if(list != null){
             this.listObjects = list;
             notifyDataSetChanged();

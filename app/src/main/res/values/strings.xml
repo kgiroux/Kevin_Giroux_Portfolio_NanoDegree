@@ -32,5 +32,6 @@
     <string name="title_activity_details">DetailsActivity</string>
     <string name="markasfavorite">Mark as Favorite</string>
     <string name="errorOccured">An error occured</string>
+    <string name="favoriteMovie">Favorite Movie</string>
 
 </resources>

@@ -23,6 +23,41 @@ public class MovieInformation implements Parcelable {
     private Double userRating;
     private String backdropPath;
     private Double popularity;
+    private Double duration;
+    private double date_query_db;
+
+    public double getDate_query_db() {
+        return date_query_db;
+    }
+
+    public void setDate_query_db(double date_query_db) {
+        this.date_query_db = date_query_db;
+    }
+
+    private boolean markAsFavorite;
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Double duration) {
+        this.duration = duration;
+    }
+
+    public boolean isMarkAsFavorite() {
+        return markAsFavorite;
+    }
+
+    public void setMarkAsFavorite(boolean markAsFavorite) {
+        this.markAsFavorite = markAsFavorite;
+    }
+
+    public void setMarkAsFavorite(int markAsFavorite) {
+        if(markAsFavorite == 1)
+            this.markAsFavorite = true;
+        else
+            this.markAsFavorite = false;
+    }
 
     public Double getPopularity() {
         return popularity;
@@ -199,6 +234,7 @@ public class MovieInformation implements Parcelable {
         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_SETTING, settingValue);
         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_DATE_QUERY_MOVIEDB, dateQuery);
         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY,this.getPopularity());
+
 
         return contentValues;
 

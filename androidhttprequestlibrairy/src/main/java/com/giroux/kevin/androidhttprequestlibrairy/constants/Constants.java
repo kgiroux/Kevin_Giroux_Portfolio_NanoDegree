@@ -5,6 +5,8 @@ package com.giroux.kevin.androidhttprequestlibrairy.constants;
  */
 public class Constants {
 
+    public static final boolean DEBUG = false;
+
 
     public static final String TAG_MOVIE_TASK = "MOVIE TASK";
     public static final String VIEW_HOLDER_MOVIE = "VIEW HOLDER MOVIE" ;
@@ -17,6 +19,8 @@ public class Constants {
     public static final String TAG_MOVIE_REVIEWS = "MOVIE_REVIEWS_TASK";
     public static final String TAG_WELCOME_ACTIVITY = "WELCOME ACTIVITY";
     public static final String MOVIE_ADAPTER ="Movie Adapter" ;
+    public static final String TAG_MOVIE_FULL = "MOVIE_FULL";
+    public static final String TAG_UTILITY = "UTILITY" ;
 
     private Constants() throws InstantiationException{throw new InstantiationError();}
     public static final String TAG_ANDROID_HTTP_REQUEST = "Android HTTP request";

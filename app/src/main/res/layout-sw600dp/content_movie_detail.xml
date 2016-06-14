@@ -1,137 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movieDetail"
+    android:visibility="invisible"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rootViewDetail"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.MovieDetailActivity"
-    tools:showIn="@layout/activity_movie_detail">
+    android:fitsSystemWindows="true"
+    tools:context="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.MovieDetailActivity">
 
-    <RelativeLayout
-        android:orientation="vertical"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:textIsSelectable="true"
-            android:id="@+id/movieDetail_title"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="27sp"
-            android:layout_margin="@dimen/text_margin" />
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <pl.droidsonroids.gif.GifImageView
-            android:src="@drawable/loadingspinner"
-            android:id="@+id/movie_item_picture"
-            android:layout_alignLeft="@id/movieDetail_title"
-            android:layout_alignStart="@id/movieDetail_title"
-            android:layout_below="@id/movieDetail_title"
-            android:layout_width="100dp"
-            android:layout_height="150dp" />
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/movieDetail_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="#888"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
 
-        <TextView
-            android:textIsSelectable="true"
-            android:layout_below="@id/movieDetail_title"
-            android:id="@+id/yearTextView"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rootViewDetail"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.MovieDetailActivity"
+        tools:showIn="@layout/activity_movie_detail">
+
+        <RelativeLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/movie_item_picture"
-            android:layout_toEndOf="@+id/movie_item_picture"
-            android:layout_alignRight="@+id/movieDetail_title"
-            android:layout_alignEnd="@+id/movieDetail_title"
-            android:layout_above="@+id/durationTextView" />
+            android:layout_height="wrap_content">
 
 
-        <Button
-            android:text="@string/markasfavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/movie_item_picture"
-            android:layout_toEndOf="@+id/movie_item_picture"
-            android:id="@+id/markAsFavorite"
-            android:layout_above="@+id/seperator"
-            android:layout_alignRight="@+id/yearTextView"
-            android:layout_alignEnd="@+id/yearTextView" />
+            <TextView
+                android:textIsSelectable="true"
+                android:id="@+id/movieDetail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="27sp"
+                android:layout_margin="@dimen/text_margin" />
 
-        <TextView
-            android:textIsSelectable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/movie_item_picture"
-            android:layout_toEndOf="@+id/movie_item_picture"
-            android:id="@+id/durationTextView"
-            android:layout_alignRight="@+id/yearTextView"
-            android:layout_alignEnd="@+id/yearTextView"
-            android:layout_above="@+id/ratingTextView" />
+            <pl.droidsonroids.gif.GifImageView
+                android:src="@drawable/loadingspinner"
+                android:id="@+id/movie_item_picture"
+                android:layout_alignLeft="@id/movieDetail_title"
+                android:layout_alignStart="@id/movieDetail_title"
+                android:layout_below="@id/movieDetail_title"
+                android:layout_width="100dp"
+                android:layout_height="150dp" />
 
-        <TextView
-            android:textIsSelectable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/movie_item_picture"
-            android:layout_toEndOf="@+id/movie_item_picture"
-            android:id="@+id/ratingTextView"
-            android:layout_alignRight="@+id/yearTextView"
-            android:layout_alignEnd="@+id/yearTextView"
-            android:layout_above="@+id/markAsFavorite" />
-
-
-        <View
-            android:id="@+id/seperator"
-            android:layout_marginBottom="2dp"
-            android:layout_below="@id/movie_item_picture"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/black"
-            android:layout_alignLeft="@+id/listTrailer"
-            android:layout_alignStart="@+id/listTrailer"
-            android:layout_alignRight="@+id/listTrailer"
-            android:layout_alignEnd="@+id/listTrailer" />
+            <TextView
+                android:textIsSelectable="true"
+                android:layout_below="@id/movieDetail_title"
+                android:id="@+id/yearTextView"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/movie_item_picture"
+                android:layout_toEndOf="@+id/movie_item_picture"
+                android:layout_alignRight="@+id/movieDetail_title"
+                android:layout_alignEnd="@+id/movieDetail_title"
+                android:layout_above="@+id/durationTextView" />
 
 
-        <ListView
-            android:layout_marginTop="2dp"
-            android:layout_below="@id/seperator"
-            android:id="@+id/listTrailer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/yearTextView"
-            android:layout_alignEnd="@+id/yearTextView"
-            android:layout_alignLeft="@+id/movie_item_picture"
-            android:layout_alignStart="@+id/movie_item_picture">
+            <TextView
+                android:textIsSelectable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/movie_item_picture"
+                android:layout_toEndOf="@+id/movie_item_picture"
+                android:id="@+id/durationTextView"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_alignRight="@+id/yearTextView"
+                android:layout_alignEnd="@+id/yearTextView"
+                android:layout_above="@+id/ratingTextView" />
+
+            <TextView
+                android:textIsSelectable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/movie_item_picture"
+                android:layout_toEndOf="@+id/movie_item_picture"
+                android:id="@+id/ratingTextView"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:layout_alignRight="@+id/yearTextView"
+                android:layout_alignEnd="@+id/yearTextView"
+                android:layout_above="@+id/markAsFavorite" />
+
+            <Button
+                style="@style/ButtonFavoriteMenu"
+                android:text="@string/markasfavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/movie_item_picture"
+                android:layout_toEndOf="@+id/movie_item_picture"
+                android:id="@+id/markAsFavorite"
+                android:layout_above="@+id/seperator"
+                android:layout_alignRight="@+id/yearTextView"
+                android:layout_alignEnd="@+id/yearTextView" />
 
 
-        </ListView>
+            <View
+                android:id="@+id/seperator"
+                android:layout_marginBottom="2dp"
+                android:layout_below="@id/movie_item_picture"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black"
+                android:layout_alignLeft="@+id/listTrailer"
+                android:layout_alignStart="@+id/listTrailer"
+                android:layout_alignRight="@+id/listTrailer"
+                android:layout_alignEnd="@+id/listTrailer" />
 
 
-        <View
-            android:id="@+id/seperator2"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_below="@id/listTrailer"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/black"
-            android:layout_alignLeft="@+id/listTrailer"
-            android:layout_alignStart="@+id/listTrailer"
-            android:layout_alignRight="@+id/listTrailer"
-            android:layout_alignEnd="@+id/listTrailer" />
-
-        <ListView
-            android:layout_marginTop="2dp"
-            android:layout_below="@id/seperator2"
-            android:id="@+id/listReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/yearTextView"
-            android:layout_alignEnd="@+id/yearTextView"
-            android:layout_alignLeft="@+id/movie_item_picture"
-            android:layout_alignStart="@+id/movie_item_picture">
+            <ListView
+                android:layout_marginTop="2dp"
+                android:layout_below="@id/seperator"
+                android:id="@+id/listTrailer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/yearTextView"
+                android:layout_alignEnd="@+id/yearTextView"
+                android:layout_alignLeft="@+id/movie_item_picture"
+                android:layout_alignStart="@+id/movie_item_picture">
 
 
-        </ListView>
+            </ListView>
 
-    </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+
+            <View
+                android:id="@+id/seperator2"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_below="@id/listTrailer"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black"
+                android:layout_alignLeft="@+id/listTrailer"
+                android:layout_alignStart="@+id/listTrailer"
+                android:layout_alignRight="@+id/listTrailer"
+                android:layout_alignEnd="@+id/listTrailer" />
+
+            <ListView
+                android:layout_marginTop="2dp"
+                android:layout_below="@id/seperator2"
+                android:id="@+id/listReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/yearTextView"
+                android:layout_alignEnd="@+id/yearTextView"
+                android:layout_alignLeft="@+id/movie_item_picture"
+                android:layout_alignStart="@+id/movie_item_picture">
+
+
+            </ListView>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

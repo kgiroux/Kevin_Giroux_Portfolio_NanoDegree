@@ -42,21 +42,17 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
     private Uri.Builder builderURL;
     private int sizeBuffer;
 
-    public TypeMine getTypeMine() {
-        return typeMine;
-    }
-
     public void setTypeMine(TypeMine typeMine) {
         this.typeMine = typeMine;
     }
 
     private TypeMine typeMine;
 
-    public Map<String, String> getListParam() {
+    private Map<String, String> getListParam() {
         return listParam;
     }
 
-    public void setListParam(Map<String, String> listParam) {
+    private void setListParam(Map<String, String> listParam) {
         this.listParam = listParam;
     }
 
@@ -72,7 +68,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         this.encoding = encoding;
     }
 
-    public void setTimeout(int timeout) {
+    private void setTimeout(int timeout) {
         this.timeout = timeout;
     }
 
@@ -92,11 +88,11 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         this.method = method;
     }
 
-    public boolean isJSON() {
+    private boolean isJSON() {
         return JSON;
     }
 
-    public String getParamStr() {
+    private String getParamStr() {
         return paramStr;
     }
 
@@ -160,9 +156,10 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
      * @return Object
      */
     private Object executeRequest(Uri uri) {
-
+        if(Constants.DEBUG)
         Log.d(Constants.TAG_ANDROID_HTTP_REQUEST, "executeRequest: perform a request");
-        displayParamaterForTheRequest();
+        if(Constants.DEBUG)
+            displayParamaterForTheRequest();
         URL url;
         HttpURLConnection urlConnection = null;
         Object object = null;
@@ -173,7 +170,8 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
             url = new URL(uri.toString());
             this.setUrl(new URL(uri.toString()).toString());
             urlConnection = (HttpURLConnection) url.openConnection();
-            Log.d(Constants.TAG_ANDROID_HTTP_REQUEST,this.getUrl() + "    " + url);
+            if(Constants.DEBUG)
+                Log.d(Constants.TAG_ANDROID_HTTP_REQUEST,this.getUrl() + "    " + url);
             //Définition des paramètres de connexion
             urlConnection.setReadTimeout(this.timeout);
             urlConnection.setConnectTimeout(this.timeout);
@@ -226,7 +224,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
                     json = new JSONObject(str);
                 }else if(urlConnection.getContentType().equals(TypeMine.IMAGE_JPEG.toString())){
                     byte[] bytes =new byte[sizeBuffer];
-                    int bytesRead = 0;
+                    int bytesRead;
 
                     ByteArrayOutputStream bao = new ByteArrayOutputStream();
 
@@ -289,7 +287,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
                 '}';
     }
 
-    public void displayParamaterForTheRequest() {
+    private void displayParamaterForTheRequest() {
         String toDisplay = "AndroidHttpRequest : " +
                 "\nJSON activated : " + JSON +
                 ", \nencoding : '" + encoding + '\'' +
@@ -317,7 +315,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
         return method;
     }
 
-    public Map<String, Object> getListObject() {
+    protected Map<String, Object> getListObject() {
         return listObject;
     }
 

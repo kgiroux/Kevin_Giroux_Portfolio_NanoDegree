@@ -37,7 +37,9 @@ public class MovieTask extends AndroidHttpRequest {
         if(o instanceof JSONObject){
             JSONObject object = (JSONObject) o;
             MovieAdapter adapter = ((MovieAdapter) getListObject().get("adapter"));
-            adapter.setDate(parseJSONData(object));
+            List<MovieInformation> list = parseJSONData(object);
+            if(list != null && adapter != null)
+                adapter.setData(list);
             Log.e(Constants.TAG_MOVIE_TASK,o.toString());
             Log.e(Constants.TAG_MOVIE_TASK,"DONE");
 

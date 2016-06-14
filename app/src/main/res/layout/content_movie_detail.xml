@@ -35,6 +35,9 @@
             android:textIsSelectable="true"
             android:layout_below="@id/movieDetail_title"
             android:id="@+id/yearTextView"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/movie_item_picture"
@@ -44,17 +47,6 @@
             android:layout_above="@+id/durationTextView" />
 
 
-        <Button
-            android:text="@string/markasfavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/movie_item_picture"
-            android:layout_toEndOf="@+id/movie_item_picture"
-            android:id="@+id/markAsFavorite"
-            android:layout_above="@+id/seperator"
-            android:layout_alignRight="@+id/yearTextView"
-            android:layout_alignEnd="@+id/yearTextView" />
-
         <TextView
             android:textIsSelectable="true"
             android:layout_width="wrap_content"
@@ -62,6 +54,8 @@
             android:layout_toRightOf="@+id/movie_item_picture"
             android:layout_toEndOf="@+id/movie_item_picture"
             android:id="@+id/durationTextView"
+            android:gravity="center"
+            android:textSize="20sp"
             android:layout_alignRight="@+id/yearTextView"
             android:layout_alignEnd="@+id/yearTextView"
             android:layout_above="@+id/ratingTextView" />
@@ -73,9 +67,24 @@
             android:layout_toRightOf="@+id/movie_item_picture"
             android:layout_toEndOf="@+id/movie_item_picture"
             android:id="@+id/ratingTextView"
+            android:gravity="center"
+            android:textSize="20sp"
             android:layout_alignRight="@+id/yearTextView"
             android:layout_alignEnd="@+id/yearTextView"
             android:layout_above="@+id/markAsFavorite" />
+
+
+        <Button
+            style="@style/ButtonFavoriteMenu"
+            android:text="@string/markasfavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/movie_item_picture"
+            android:layout_toEndOf="@+id/movie_item_picture"
+            android:id="@+id/markAsFavorite"
+            android:layout_above="@+id/seperator"
+            android:layout_alignRight="@+id/yearTextView"
+            android:layout_alignEnd="@+id/yearTextView" />
 
 
         <View

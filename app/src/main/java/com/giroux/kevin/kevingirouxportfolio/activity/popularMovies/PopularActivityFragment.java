@@ -57,6 +57,22 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
             MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY
     };
 
+    private static String[] MOVIE_COLUMNS_INNER_JOIN = {
+            MovieContractor.MovieEntry.TABLE_NAME + "." +MovieContractor.MovieEntry._ID,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_TITLE,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_RELEASE_DATE,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_OVERVIEW,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_USER_RATING,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER_PATH,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_BACKDROP_PATH,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_SETTING,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_DATE_QUERY_MOVIEDB,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY,
+            MovieContractor.FavoriteEntry.TABLE_NAME + "." + MovieContractor.FavoriteEntry._ID
+    };
+
     public static int COL_MOVIE_ID =0;
     public static int COLUMN_MOVIE_ORIGINAL_TITLE =1;
     public static int COLUMN_MOVIE_TITLE =2;
@@ -70,7 +86,9 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
     public static int COLUMN_MOVIE_POPULARITY = 10;
 
 
+
     public PopularActivityFragment() {
+
     }
 
     @Override
@@ -94,20 +112,33 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
 
 
             if (getActivity().getApplicationContext().getContentResolver() != null) {
-                Uri uri = MovieContractor.MovieEntry.buildUriLastestMovies();
-                Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
-                List<MovieInformation> MovieList = MovieContractor.MovieEntry.getDataFromCursor(c);
+                List<MovieInformation> movieList;
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+                String preferencesString = preferences.getString(getString(R.string.pref_list_key),getString(R.string.pref_list_default));
+                if(!preferencesString.equals(getString(R.string.pref_list_exclude))){
+                    Uri uri = MovieContractor.MovieEntry.buildUriLastestMovies();
+                    Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
+                    movieList = MovieContractor.MovieEntry.getDataFromCursor(c);
 
 
-                movieAdapter = new MovieAdapter(getActivity(), MovieList);
+
+
+                    if (c != null && c.getCount() == 0) {
+                        queryListFilm();
+                    }
+                    if (c != null)
+                        c.close();
+                }else{
+                    Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
+                    Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS_INNER_JOIN, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
+                    movieList = MovieContractor.MovieEntry.getDataFromCursor(c);
+
+                }
+
+                movieAdapter = new MovieAdapter(getActivity(), movieList);
                 movieAdapter.setmTwoPane(mTwoPane);
                 recyclerView.setAdapter(movieAdapter);
 
-                if (c != null && c.getCount() == 0) {
-                    queryListFilm();
-                }
-                if (c != null)
-                    c.close();
             }
 
         }
@@ -117,6 +148,14 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if(movieAdapter != null){
+
+        }
+    }
 
     private void queryListFilm(){
 
@@ -143,7 +182,9 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
             movieTask.addUIObjectToUpdate("adapter",movieAdapter);
             movieTask.execute();
         }else{
-
+            Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
+            Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS_INNER_JOIN, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
+            List<MovieInformation> MovieList = MovieContractor.MovieEntry.getDataFromCursor(c);
         }
 
     }

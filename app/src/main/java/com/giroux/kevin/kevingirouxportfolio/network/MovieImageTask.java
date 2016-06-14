@@ -54,8 +54,6 @@ public class MovieImageTask extends AndroidHttpRequest {
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER,movieInformationList.get(vh.getMPosition()).getPosterBitmap());
                         String value [] = new String[]{Integer.toString(movieInformationList.get(vh.getMPosition()).getId())};
-                        SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
-                        sqLiteQueryBuilder.appendWhere(MovieContractor.MovieEntry._ID);
                         String whereClause = MovieContractor.MovieEntry._ID + "=?";
                         context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformationList.get(vh.getMPosition()).getId()),contentValues,whereClause,value);
 
