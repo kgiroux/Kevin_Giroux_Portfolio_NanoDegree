@@ -160,9 +160,6 @@ public class MovieContractor {
                 while(c.moveToNext()){
                     MovieInformation movieInformation = new MovieInformation();
                     movieInformation.setId(c.getInt(PopularActivityFragment.COL_MOVIE_ID));
-
-
-
                     movieInformation.setOriginalTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_ORIGINAL_TITLE));
                     movieInformation.setTitle(c.getString(PopularActivityFragment.COLUMN_MOVIE_TITLE));
                     movieInformation.setReleaseDate(c.getString(PopularActivityFragment.COLUMN_MOVIE_RELEASE_DATE));
@@ -173,7 +170,6 @@ public class MovieContractor {
                     movieInformation.setBackdropPath(c.getString(PopularActivityFragment.COLUMN_MOVIE_BACKDROP_PATH));
                     movieInformation.setSettings(c.getString(PopularActivityFragment.COLUMN_MOVIE_SETTING));
                     movieInformation.setPopularity(c.getDouble(PopularActivityFragment.COLUMN_MOVIE_POPULARITY));
-                    Log.d(Constants.TAG_POPULAR_MOVIE,movieInformation.toString());
                     movieInformationList.add(movieInformation);
                 }
             }

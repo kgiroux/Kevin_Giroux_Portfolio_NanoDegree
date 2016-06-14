@@ -7,10 +7,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieImageDetailsTask;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -40,16 +43,22 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     private final int DETAIL_LOADER = 1;
     public static String DETAIL_URI = "Detail Activity Movie";
+    @BindView(R.id.movieDetail)
+    CoordinatorLayout movieDetail;
     private Uri mUri;
     private MovieInformation movieInformation;
     @BindView(R.id.movieDetail_imageView)
     GifImageView gifImageView;
     @BindView(R.id.movie_item_picture)
     GifImageView gifPoster;
-    @BindView(R.id.movieDetail_title) TextView titleTv;
-    @BindView(R.id.yearTextView) TextView yearTv;
-    @BindView(R.id.durationTextView) TextView durationTv;
-    @BindView(R.id.ratingTextView) TextView ratingTv;
+    @BindView(R.id.movieDetail_title)
+    TextView titleTv;
+    @BindView(R.id.yearTextView)
+    TextView yearTv;
+    @BindView(R.id.durationTextView)
+    TextView durationTv;
+    @BindView(R.id.ratingTextView)
+    TextView ratingTv;
     @BindView(R.id.markAsFavorite)
     Button markAsFavorite;
 
@@ -94,7 +103,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
         View root = inflater.inflate(R.layout.activity_movie_detail, container, false);
         ButterKnife.bind(this, root);
-
+        movieDetail.setVisibility(View.VISIBLE);
         markAsFavorite.setOnClickListener(this);
 
         return root;
@@ -110,7 +119,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     }
 
     private void LoadImage() {
-        if(movieInformation != null){
+        if (movieInformation != null) {
             /* Task that can load the picture */
             Map<String, String> urlParams = new HashMap<>();
             urlParams.put("", movieInformation.getBackdropPath());
@@ -135,7 +144,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if ( null != mUri ) {
+        if (null != mUri) {
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
             return new CursorLoader(
@@ -152,12 +161,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+
         Log.i(Constants.TAG_DETAILS_ACTIVITY, "In onLoadFinished");
          /* We bind the ImageView for update the picture when we download the picture */
         if (gifImageView != null)
             gifImageView.setImageResource(R.drawable.loadingspinner);
-        if (!MovieContractor.MovieEntry.getDataFromCursor(data).isEmpty()) {
-            movieInformation = (MovieContractor.MovieEntry.getDataFromCursor(data)).get(0);
+        List<MovieInformation> informationList = MovieContractor.MovieEntry.getDataFromCursor(data);
+        if (!informationList.isEmpty()) {
+            movieInformation = informationList.get(0);
             LoadImage();
             /* We format informations for adding them to the activity */
             if (titleTv != null)
@@ -166,7 +178,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             if (yearTv != null)
                 yearTv.setText(movieInformation.getReleaseDate());
 
-            if (gifPoster != null) {
+            if (gifPoster != null && movieInformation.getPosterBitmap() != null) {
                 gifPoster.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getPosterBitmap(), 0, movieInformation.getPosterBitmap().length)).getBitmap());
             }
 
@@ -183,7 +195,6 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         }
 
     }
-
 
 
     @Override
@@ -210,9 +221,9 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         if (movieInformation == null)
             Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccured), Toast.LENGTH_LONG).show();
         else {
-            Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie(movieInformation.getId());
+            //Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie(movieInformation.getId());
             ContentValues contentValues = MovieContractor.FavoriteEntry.buildContentValue(movieInformation.getId());
-            getContext().getContentResolver().insert(uri, contentValues);
+            getContext().getContentResolver().insert(MovieContractor.FavoriteEntry.CONTENT_URI, contentValues);
         }
     }
 }

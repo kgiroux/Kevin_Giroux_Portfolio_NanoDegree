@@ -59,7 +59,6 @@ public class MovieAdapter extends RecyclerView.Adapter {
         if(holder instanceof ViewHolderMovie) {
             ImageView imageView = ((ViewHolderMovie) holder).getImageMovie();
             if (listObjects.get(position).getPosterBitmap() != null){
-                displayListObject();
                 imageView.setImageBitmap(new BitmapDrawable(mActivtiy.getApplicationContext().getResources(), BitmapFactory.decodeByteArray(listObjects.get(position).getPosterBitmap(),0,listObjects.get(position).getPosterBitmap().length)).getBitmap());
             }else{
                 /* We have load the information with the MovieTask, It is time to load the picture Poster for the rendering */

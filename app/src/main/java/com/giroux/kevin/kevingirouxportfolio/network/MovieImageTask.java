@@ -2,6 +2,7 @@ package com.giroux.kevin.kevingirouxportfolio.network;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -52,7 +53,11 @@ public class MovieImageTask extends AndroidHttpRequest {
                         // Updating the BLOP field into the database;
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_POSTER,movieInformationList.get(vh.getMPosition()).getPosterBitmap());
-                        context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformationList.get(vh.getMPosition()).getId()),contentValues,null,null);
+                        String value [] = new String[]{Integer.toString(movieInformationList.get(vh.getMPosition()).getId())};
+                        SQLiteQueryBuilder sqLiteQueryBuilder = new SQLiteQueryBuilder();
+                        sqLiteQueryBuilder.appendWhere(MovieContractor.MovieEntry._ID);
+                        String whereClause = MovieContractor.MovieEntry._ID + "=?";
+                        context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformationList.get(vh.getMPosition()).getId()),contentValues,whereClause,value);
 
                     }
                 }

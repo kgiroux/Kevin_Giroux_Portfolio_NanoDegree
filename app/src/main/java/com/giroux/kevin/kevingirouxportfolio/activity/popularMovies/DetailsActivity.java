@@ -29,7 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
 
             if(findViewById(R.id.movieDetail) != null)
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.movieDetail, fragment)
+                        .add(R.id.movieDetail, fragment)
                         .commit();
         }
     }
