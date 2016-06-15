@@ -5,7 +5,7 @@ package com.giroux.kevin.androidhttprequestlibrairy.constants;
  */
 public class Constants {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
 
     public static final String TAG_MOVIE_TASK = "MOVIE TASK";

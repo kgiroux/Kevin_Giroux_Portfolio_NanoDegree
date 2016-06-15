@@ -145,7 +145,7 @@
                 android:layout_alignEnd="@+id/listTrailer" />
 
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:layout_marginTop="2dp"
                 android:layout_below="@id/seperator"
                 android:id="@+id/listTrailer"
@@ -157,7 +157,7 @@
                 android:layout_alignStart="@+id/movie_item_picture">
 
 
-            </ListView>
+            </android.support.v7.widget.RecyclerView>
 
 
             <View
@@ -173,7 +173,7 @@
                 android:layout_alignRight="@+id/listTrailer"
                 android:layout_alignEnd="@+id/listTrailer" />
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:layout_marginTop="2dp"
                 android:layout_below="@id/seperator2"
                 android:id="@+id/listReview"
@@ -185,7 +185,7 @@
                 android:layout_alignStart="@+id/movie_item_picture">
 
 
-            </ListView>
+            </android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

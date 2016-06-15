@@ -25,6 +25,32 @@ public class MovieInformation implements Parcelable {
     private Double popularity;
     private Double duration;
     private double date_query_db;
+    private boolean markAsFavorite;
+    private boolean trailerLoaded;
+    private boolean reviewLoaded;
+
+
+    public boolean isTrailerLoaded() {
+        return trailerLoaded;
+    }
+
+    public void setTrailerLoaded(int trailerLoaded) {
+        if(trailerLoaded == 1)
+            this.trailerLoaded = true;
+        else
+            this.trailerLoaded = false;
+    }
+
+    public boolean isReviewLoaded() {
+        return reviewLoaded;
+    }
+
+    public void setReviewLoaded(int reviewLoaded) {
+        if(reviewLoaded == 1)
+            this.reviewLoaded = true;
+        else
+            this.reviewLoaded = false;
+    }
 
     public double getDate_query_db() {
         return date_query_db;
@@ -34,7 +60,6 @@ public class MovieInformation implements Parcelable {
         this.date_query_db = date_query_db;
     }
 
-    private boolean markAsFavorite;
 
     public Double getDuration() {
         return duration;

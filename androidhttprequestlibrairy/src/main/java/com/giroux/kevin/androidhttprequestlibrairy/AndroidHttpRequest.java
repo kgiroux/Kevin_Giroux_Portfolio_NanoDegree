@@ -322,7 +322,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
     private Uri createParamString(Map<String, String> listParam) {
         Uri url = Uri.parse(this.getUrl());
         JSONObject object = new JSONObject();
-       builderURL.scheme(url.getScheme()).appendEncodedPath(url.getPath());
+        builderURL.scheme(url.getScheme()).appendEncodedPath(url.getPath());
         if(this.isJSON()){
             try{
 
@@ -335,7 +335,7 @@ public class AndroidHttpRequest extends AsyncTask<String[], Void, Object> {
             }
         }else{
             for (Map.Entry<String, String> entrySet : listParam.entrySet()) {
-                if(entrySet.getKey().equals("")){
+                if(entrySet.getKey().equals("") || entrySet.getKey().equals("/")){
                     builderURL.appendEncodedPath(entrySet.getValue());
                 }else{
                     builderURL.appendQueryParameter(entrySet.getKey(), entrySet.getValue()).build();

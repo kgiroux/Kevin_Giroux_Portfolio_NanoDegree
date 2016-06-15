@@ -12,6 +12,8 @@ import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.DetailsActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
+import com.giroux.kevin.kevingirouxportfolio.dto.Review;
+import com.giroux.kevin.kevingirouxportfolio.dto.Trailer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,23 @@ public class MovieContractor {
         public static Uri buildTrailerUriFromMovieId(long idMovie){
             return CONTENT_URI.buildUpon().appendPath(Long.toString(idMovie)).build();
         }
+
+        public static List<Trailer> convertToList(Cursor c) {
+            List<Trailer> trailerList = new ArrayList<>();
+            if(c != null) {
+                while (c.moveToNext()) {
+                    Trailer trailer = new Trailer();
+                    trailer.setIdMovie(c.getInt(DetailsActivityFragment.COLUMN_TRAILER_MOVIE_ID));
+                    trailer.setId(c.getInt(DetailsActivityFragment.COL_TRAILER_ID));
+                    trailer.setType(c.getString(DetailsActivityFragment.COLUMN_TRAILER_TYPE));
+                    trailer.setYoutubeKey(c.getString(DetailsActivityFragment.COLUMN_TRAILER_KEY_YOUTUBE));
+                    trailer.setYoutube(c.getInt(DetailsActivityFragment.COLUMN_TRAILER_IS_YOUTUBE));
+                    trailerList.add(trailer);
+                }
+            }
+            return trailerList;
+
+        }
     }
 
     public static final class ReviewEntry implements BaseColumns{
@@ -95,6 +114,20 @@ public class MovieContractor {
             return CONTENT_URI.buildUpon().appendPath(Long.toString(idMovie)).build();
         }
 
+        public static List<Review> convertToList(Cursor c) {
+            List<Review> reviewsList = new ArrayList<>();
+            if(c != null) {
+                while (c.moveToNext()) {
+                    Review review = new Review();
+                    review.setIdMovie(c.getInt(DetailsActivityFragment.COL_REVIEW_ID_MOVIE));
+                    review.setContent(c.getString(DetailsActivityFragment.COL_REVIEW_CONTENT));
+                    review.setNameReviewer(c.getString(DetailsActivityFragment.COL_REVIEW_NAME));
+                    review.setId(c.getInt(DetailsActivityFragment.COL_REVIEW_ID));
+                    reviewsList.add(review);
+                }
+            }
+            return reviewsList;
+        }
     }
 
     public static final class MovieEntry implements BaseColumns {
@@ -126,7 +159,10 @@ public class MovieContractor {
         public static final String COLUMN_MOVIE_DURATION = "duration";
         // Movie markAsFavorite
         public static final String COLUMN_MOVIE_MARK_AS_FAVORITE ="markAsFavorite";
-
+        // Movie Trailer Load
+        public static final String COLUMN_MOVIE_TRAILER_LOADED ="isTrailer";
+        // Movie Review Load
+        public static final String COLUMN_MOVIE_REVIEW_LOADED ="isReview";
 
         // Content URI
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
@@ -198,6 +234,8 @@ public class MovieContractor {
                     movieInformation.setMarkAsFavorite(c.getInt(DetailsActivityFragment.COLUMN_MOVIE_MARK_AS_FAVORITE));
                     movieInformation.setDuration(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_DURATION));
                     movieInformation.setDate_query_db(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_DATE_QUERY_MOVIEDB));
+                    movieInformation.setTrailerLoaded(c.getInt(DetailsActivityFragment.COLUMN_MOVIE_TRAILER_LOADED));
+                    movieInformation.setReviewLoaded(c.getInt(DetailsActivityFragment.COLUMN_MOVIE_REVIEW_LOADED));
                     movieInformationList.add(movieInformation);
                 }
             }

@@ -48,6 +48,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieEntry.COLUMN_MOVIE_POPULARITY + " REAL NOT NULL, " +
                 MovieEntry.COLUMN_MOVIE_DURATION + " INTEGER, " +
                 MovieEntry.COLUMN_MOVIE_MARK_AS_FAVORITE + " BOOLEAN,"+
+                MovieEntry.COLUMN_MOVIE_TRAILER_LOADED + " BOOLEAN,"+
+                MovieEntry.COLUMN_MOVIE_REVIEW_LOADED + " BOOLEAN,"+
                 "UNIQUE (" + MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE + ", " + MovieEntry.COLUMN_MOVIE_TITLE + ")" +
                 "  ON CONFLICT REPLACE )";
 
