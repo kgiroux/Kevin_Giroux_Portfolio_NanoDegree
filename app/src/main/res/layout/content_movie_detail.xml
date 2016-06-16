@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/rootViewDetail"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.MovieDetailActivity"
-    tools:showIn="@layout/activity_movie_detail">
+    tools:context="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.DetailsActivity">
 
     <RelativeLayout
         android:orientation="vertical"
@@ -43,8 +42,7 @@
             android:layout_toRightOf="@id/movie_item_picture"
             android:layout_toEndOf="@+id/movie_item_picture"
             android:layout_alignRight="@+id/movieDetail_title"
-            android:layout_alignEnd="@+id/movieDetail_title"
-            android:layout_above="@+id/durationTextView" />
+            android:layout_alignEnd="@+id/movieDetail_title" />
 
 
         <TextView
@@ -58,7 +56,7 @@
             android:textSize="20sp"
             android:layout_alignRight="@+id/yearTextView"
             android:layout_alignEnd="@+id/yearTextView"
-            android:layout_above="@+id/ratingTextView" />
+            android:layout_below="@+id/yearTextView" />
 
         <TextView
             android:textIsSelectable="true"
@@ -71,8 +69,7 @@
             android:textSize="20sp"
             android:layout_alignRight="@+id/yearTextView"
             android:layout_alignEnd="@+id/yearTextView"
-            android:layout_above="@+id/markAsFavorite" />
-
+            android:layout_below="@+id/durationTextView" />
 
         <Button
             style="@style/ButtonFavoriteMenu"
@@ -82,15 +79,54 @@
             android:layout_toRightOf="@+id/movie_item_picture"
             android:layout_toEndOf="@+id/movie_item_picture"
             android:id="@+id/markAsFavorite"
-            android:layout_above="@+id/seperator"
+            android:layout_below="@+id/ratingTextView"
             android:layout_alignRight="@+id/yearTextView"
             android:layout_alignEnd="@+id/yearTextView" />
 
 
         <View
+            android:id="@+id/seperatorSynopsis"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignEnd="@+id/listTrailer"
+            android:layout_alignLeft="@+id/listTrailer"
+            android:layout_alignRight="@+id/listTrailer"
+            android:layout_alignStart="@+id/listTrailer"
+            android:layout_below="@+id/markAsFavorite"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/black" />
+
+        <TextView
+            android:id="@+id/synopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/markAsFavorite"
+            android:layout_alignLeft="@+id/movie_item_picture"
+            android:layout_alignRight="@+id/markAsFavorite"
+            android:layout_alignStart="@+id/movie_item_picture"
+            android:layout_below="@+id/seperatorSynopsis"
+            android:text="@string/synopsis"
+            android:textIsSelectable="true"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/synopsisContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/markAsFavorite"
+            android:layout_alignLeft="@+id/movie_item_picture"
+            android:layout_alignRight="@+id/markAsFavorite"
+            android:layout_alignStart="@+id/movie_item_picture"
+            android:layout_below="@+id/synopsis"
+            android:textIsSelectable="true" />
+
+
+        <View
             android:id="@+id/seperator"
             android:layout_marginBottom="2dp"
-            android:layout_below="@id/movie_item_picture"
+            android:layout_below="@+id/synopsisContent"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@android:color/black"

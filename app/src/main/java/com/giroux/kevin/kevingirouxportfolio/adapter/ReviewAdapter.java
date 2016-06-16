@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.ViewHolder.ViewHolderReview;
-import com.giroux.kevin.kevingirouxportfolio.ViewHolder.ViewHolderTrailer;
 import com.giroux.kevin.kevingirouxportfolio.dto.Review;
-import com.giroux.kevin.kevingirouxportfolio.dto.Trailer;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ public class ReviewAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolderTrailer(LayoutInflater.from(context).inflate(R.layout.recycler_item_review, parent, false));
+        return new ViewHolderReview(LayoutInflater.from(context).inflate(R.layout.recycler_item_review, parent, false));
     }
 
     @Override

@@ -6,16 +6,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.FavoriteEntry;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.MovieEntry;
-import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.TrailerEntry;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.ReviewEntry;
+import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor.TrailerEntry;
 /**
  * Created by kevin on 06/06/2016. Kevin Giroux Portfolio
  */
 
 public class MovieDbHelper extends SQLiteOpenHelper {
 
-    static final String DATABASE_NAME = "movie.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "movie.db";
+    private static final int DATABASE_VERSION = 3;
 
     public MovieDbHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -50,6 +50,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieEntry.COLUMN_MOVIE_MARK_AS_FAVORITE + " BOOLEAN,"+
                 MovieEntry.COLUMN_MOVIE_TRAILER_LOADED + " BOOLEAN,"+
                 MovieEntry.COLUMN_MOVIE_REVIEW_LOADED + " BOOLEAN,"+
+                MovieEntry.COLUMN_MOVIE_BACKGROUND + " BLOP," +
                 "UNIQUE (" + MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE + ", " + MovieEntry.COLUMN_MOVIE_TITLE + ")" +
                 "  ON CONFLICT REPLACE )";
 

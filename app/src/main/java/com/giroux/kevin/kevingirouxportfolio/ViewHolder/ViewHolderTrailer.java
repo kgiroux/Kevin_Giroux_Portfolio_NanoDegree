@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
@@ -19,7 +18,6 @@ import com.giroux.kevin.kevingirouxportfolio.dto.Trailer;
 public class ViewHolderTrailer extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView textView;
-    private ImageView imageView;
     private Context context;
     private Trailer trailer;
 
@@ -29,8 +27,6 @@ public class ViewHolderTrailer extends RecyclerView.ViewHolder implements View.O
 
     public ViewHolderTrailer(View itemView) {
         super(itemView);
-
-        imageView = (ImageView) itemView.findViewById(R.id.imageTrailerLaunch);
         itemView.setOnClickListener(this);
         textView = (TextView) itemView.findViewById(R.id.titleTrailer);
 
@@ -46,7 +42,7 @@ public class ViewHolderTrailer extends RecyclerView.ViewHolder implements View.O
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.imageTrailerLaunch){
+        if (v.getId() == R.id.linearLayout) {
             try {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer.getYoutubeKey()));
                 context.startActivity(intent);

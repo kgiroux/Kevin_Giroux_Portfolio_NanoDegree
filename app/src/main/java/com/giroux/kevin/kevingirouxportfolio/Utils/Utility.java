@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

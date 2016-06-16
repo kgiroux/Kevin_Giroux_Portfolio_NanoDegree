@@ -1,24 +1,18 @@
 package com.giroux.kevin.kevingirouxportfolio.adapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.CursorLoader;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.TypeMine;
 import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.ViewHolder.ViewHolderMovie;
-import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieImageTask;
 

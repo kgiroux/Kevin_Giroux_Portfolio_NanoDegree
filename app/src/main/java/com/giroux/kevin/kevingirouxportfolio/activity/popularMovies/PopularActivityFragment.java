@@ -96,7 +96,9 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
                              Bundle savedInstanceState) {
         View viewRoot = inflater.inflate(R.layout.fragment_popular, container, false);
         ButterKnife.bind(this, viewRoot);
-
+        Cursor c;
+        Uri uri;
+        List<MovieInformation> movieList;
         if (layout != null) {
             layout.setOnRefreshListener(this);
             layout.setColorSchemeResources(
@@ -109,35 +111,26 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
 
-
-
             if (getActivity().getApplicationContext().getContentResolver() != null) {
-                List<MovieInformation> movieList;
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
                 String preferencesString = preferences.getString(getString(R.string.pref_list_key),getString(R.string.pref_list_default));
                 if(!preferencesString.equals(getString(R.string.pref_list_exclude))){
-                    Uri uri = MovieContractor.MovieEntry.buildUriLastestMovies();
-                    Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
+                    uri = MovieContractor.MovieEntry.buildUriLastestMovies();
+                    c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
                     movieList = MovieContractor.MovieEntry.getDataFromCursor(c);
-
-
-
-
-                    if (c != null && c.getCount() == 0) {
-                        queryListFilm();
-                    }
-                    if (c != null)
-                        c.close();
                 }else{
-                    Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
-                    Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS_INNER_JOIN, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
+                    uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
+                    c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS_INNER_JOIN, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
                     movieList = MovieContractor.MovieEntry.getDataFromCursor(c);
-
                 }
 
                 movieAdapter = new MovieAdapter(getActivity(), movieList);
                 movieAdapter.setmTwoPane(mTwoPane);
                 recyclerView.setAdapter(movieAdapter);
+
+                if (c != null && c.getCount() == 0) {
+                    queryListFilm();
+                }
 
             }
 
@@ -146,15 +139,6 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
 
         return viewRoot;
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if(movieAdapter != null){
-
-        }
     }
 
     private void queryListFilm(){
@@ -184,7 +168,9 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
         }else{
             Uri uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
             Cursor c = getActivity().getApplicationContext().getContentResolver().query(uri, MOVIE_COLUMNS_INNER_JOIN, null, null, MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC");
-            List<MovieInformation> MovieList = MovieContractor.MovieEntry.getDataFromCursor(c);
+            List<MovieInformation> movieList = MovieContractor.MovieEntry.getDataFromCursor(c);
+            if(movieAdapter != null)
+                movieAdapter.setData(movieList);
         }
 
     }
@@ -201,7 +187,7 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
         });
     }
 
-    public void setmTwoPane(boolean mTwoPane){
+    void setmTwoPane(boolean mTwoPane){
         this.mTwoPane = mTwoPane;
         if(movieAdapter != null){
             movieAdapter.setmTwoPane(mTwoPane);

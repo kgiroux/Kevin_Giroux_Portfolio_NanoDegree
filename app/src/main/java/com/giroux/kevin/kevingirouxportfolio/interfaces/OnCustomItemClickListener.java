@@ -9,5 +9,5 @@ import android.net.Uri;
 
 public interface OnCustomItemClickListener {
 
-    public void onItemSelected(Uri dateUri);
+    void onItemSelected(Uri dateUri);
 }

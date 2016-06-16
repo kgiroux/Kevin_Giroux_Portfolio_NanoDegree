@@ -28,6 +28,8 @@ public class MovieInformation implements Parcelable {
     private boolean markAsFavorite;
     private boolean trailerLoaded;
     private boolean reviewLoaded;
+    private byte[] posterBitmap;
+    private byte[] backdropPathBitmap;
 
 
     public boolean isTrailerLoaded() {
@@ -92,7 +94,7 @@ public class MovieInformation implements Parcelable {
         this.popularity = popularity;
     }
 
-    private byte []  posterBitmap;
+
 
     public int getId() {
         return id;
@@ -203,6 +205,9 @@ public class MovieInformation implements Parcelable {
         userRating = in.readDouble();
         backdropPath = in.readString();
         posterPath = in.readString();
+        int sizeBack = in.readInt();
+        backdropPathBitmap = new byte[sizeBack];
+        in.readByteArray(backdropPathBitmap);
     }
 
 
@@ -224,6 +229,8 @@ public class MovieInformation implements Parcelable {
         dest.writeDouble(userRating);
         dest.writeString(backdropPath);
         dest.writeString(posterPath);
+        dest.writeInt(backdropPathBitmap.length);
+        dest.writeByteArray(backdropPathBitmap);
     }
 
     public static final Parcelable.Creator<MovieInformation> CREATOR
@@ -238,12 +245,17 @@ public class MovieInformation implements Parcelable {
         }
     };
 
-    public String getSettings() {
-        return settings;
-    }
 
     public void setSettings(String settings) {
         this.settings = settings;
+    }
+
+    public byte[] getBackdropPathBitmap() {
+        return backdropPathBitmap;
+    }
+
+    public void setBackdropPathBitmap(byte[] backdropPathBitmap) {
+        this.backdropPathBitmap = backdropPathBitmap;
     }
 
     public ContentValues generateContentValuesFromMovieInformation(String settingValue, long dateQuery) {

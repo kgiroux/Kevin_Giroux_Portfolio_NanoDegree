@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -51,8 +52,7 @@ import pl.droidsonroids.gif.GifImageView;
  */
 public class DetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
-    private final int DETAIL_LOADER = 1;
-    public static String DETAIL_URI = "Detail Activity Movie";
+    static String DETAIL_URI = "Detail Activity Movie";
     @BindView(R.id.movieDetail)
     @Nullable
     CoordinatorLayout movieDetail;
@@ -60,6 +60,9 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     RecyclerView listTrailer;
     @BindView(R.id.listReview)
     RecyclerView listReview;
+    public static final int COL_MOVIE_ID = 0;
+    public static final int COLUMN_MOVIE_ORIGINAL_TITLE = 1;
+    public static final int COLUMN_MOVIE_TITLE = 2;
     private Uri mUri;
     private MovieInformation movieInformation;
     private TrailerAdapter trailerAdapter;
@@ -77,8 +80,20 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     TextView ratingTv;
     @BindView(R.id.markAsFavorite)
     Button markAsFavorite;
-
-
+    public static final int COLUMN_MOVIE_RELEASE_DATE = 3;
+    public static final int COLUMN_MOVIE_OVERVIEW = 4;
+    public static final int COLUMN_MOVIE_USER_RATING = 5;
+    public static final int COLUMN_MOVIE_POSTER = 6;
+    public static final int COLUMN_MOVIE_POSTER_PATH = 7;
+    public static final int COLUMN_MOVIE_BACKDROP_PATH = 8;
+    public static final int COLUMN_MOVIE_SETTING = 9;
+    public static final int COLUMN_MOVIE_DATE_QUERY_MOVIEDB = 10;
+    public static final int COLUMN_MOVIE_POPULARITY = 11;
+    public static final int COLUMN_MOVIE_MARK_AS_FAVORITE = 12;
+    public static final int COLUMN_MOVIE_DURATION = 13;
+    public static final int COLUMN_MOVIE_TRAILER_LOADED = 14;
+    public static final int COLUMN_MOVIE_REVIEW_LOADED = 15;
+    public static final int COLUMN_MOVIE_BACKDROP = 16;
     private static String[] MOVIE_COLUMNS = {
             MovieContractor.MovieEntry._ID,
             MovieContractor.MovieEntry.COLUMN_MOVIE_ORIGINAL_TITLE,
@@ -96,24 +111,11 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             MovieContractor.MovieEntry.COLUMN_MOVIE_DURATION,
             MovieContractor.MovieEntry.COLUMN_MOVIE_TRAILER_LOADED,
             MovieContractor.MovieEntry.COLUMN_MOVIE_REVIEW_LOADED,
+            MovieContractor.MovieEntry.COLUMN_MOVIE_BACKGROUND
     };
-
-    public static int COL_MOVIE_ID = 0;
-    public static int COLUMN_MOVIE_ORIGINAL_TITLE = 1;
-    public static int COLUMN_MOVIE_TITLE = 2;
-    public static int COLUMN_MOVIE_RELEASE_DATE = 3;
-    public static int COLUMN_MOVIE_OVERVIEW = 4;
-    public static int COLUMN_MOVIE_USER_RATING = 5;
-    public static int COLUMN_MOVIE_POSTER = 6;
-    public static int COLUMN_MOVIE_POSTER_PATH = 7;
-    public static int COLUMN_MOVIE_BACKDROP_PATH = 8;
-    public static int COLUMN_MOVIE_SETTING = 9;
-    public static int COLUMN_MOVIE_DATE_QUERY_MOVIEDB = 10;
-    public static int COLUMN_MOVIE_POPULARITY = 11;
-    public static int COLUMN_MOVIE_MARK_AS_FAVORITE = 12;
-    public static int COLUMN_MOVIE_DURATION = 13;
-    public static int COLUMN_MOVIE_TRAILER_LOADED = 14;
-    public static int COLUMN_MOVIE_REVIEW_LOADED = 15;
+    @BindView(R.id.synopsisContent)
+    private TextView synopsisContent;
+    @BindView(R.id.rootViewDetail)
 
     private static String[] REVIEW_ENTRY = {
             MovieContractor.ReviewEntry._ID,
@@ -126,7 +128,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     public static int COL_REVIEW_CONTENT = 1;
     public static int COL_REVIEW_NAME = 2;
     public static int COL_REVIEW_ID_MOVIE = 3;
-
+    private CollapsingToolbarLayout toolbarLayout;
     private static String[] TRAILER_ENTRY = {
             MovieContractor.TrailerEntry._ID,
             MovieContractor.TrailerEntry.COLUMN_TRAILER_NAME,
@@ -174,6 +176,11 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             gifImageView = (GifImageView) root.findViewById(R.id.movieDetail_imageView);
         if (movieDetail != null)
             movieDetail.setVisibility(View.VISIBLE);
+
+        toolbarLayout = (CollapsingToolbarLayout) root.findViewById(R.id.toolbar_layout);
+        if (toolbarLayout == null) {
+            toolbarLayout = (CollapsingToolbarLayout) container.findViewById(R.id.toolbar_layout);
+        }
         markAsFavorite.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -181,7 +188,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         listTrailer.setLayoutManager(layoutManager);
 
 
-        trailerAdapter = new TrailerAdapter(getContext(),new ArrayList<Trailer>());
+        trailerAdapter = new TrailerAdapter(getContext(), new ArrayList<Trailer>());
 
         listTrailer.setAdapter(trailerAdapter);
 
@@ -189,20 +196,11 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         listReview.setLayoutManager(linearLayoutManager);
 
-        reviewAdapter = new ReviewAdapter(getContext(),new ArrayList<Review>());
+        reviewAdapter = new ReviewAdapter(getContext(), new ArrayList<Review>());
         listReview.setAdapter(reviewAdapter);
 
 
         return root;
-    }
-
-
-    private String formatTextInformation() {
-        return "Title : " + movieInformation.getTitle()
-                + "\n" + "Original Title : " + movieInformation.getOriginalTitle()
-                + "\n" + "Realease Date : " + movieInformation.getReleaseDate()
-                + "\n" + "User Rating : " + String.valueOf(movieInformation.getUserRating())
-                + "\n" + "Synopsis : " + movieInformation.getOverView();
     }
 
     private void LoadImage() {
@@ -215,6 +213,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             movieImageDetailsTask.setContext(getActivity().getApplicationContext());
             movieImageDetailsTask.setTypeMine(TypeMine.IMAGE_WEBP);
             movieImageDetailsTask.addUIObjectToUpdate("gifImageView", gifImageView);
+            movieImageDetailsTask.addUIObjectToUpdate("idMovie", movieInformation.getId());
             movieImageDetailsTask.execute();
         }
 
@@ -223,7 +222,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     private void LoadTrailer(int idMovie) {
         Map<String, String> urlParam = new HashMap<>();
         urlParam.put("api_key", getString(R.string.apiKey));
-        urlParam.put("/","videos");
+        urlParam.put("/", "videos");
         urlParam.put("", String.valueOf(idMovie));
         MovieTrailerTask movieTrailerTask = new MovieTrailerTask("https://api.themoviedb.org/3/movie/", Constants.METHOD_GET, urlParam);
         movieTrailerTask.setJSON(false);
@@ -231,7 +230,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         Map<String, Object> listObject = new HashMap<>();
         listObject.put("idMovie", movieInformation.getId());
         listObject.put("trailerAdapter", trailerAdapter);
-        listObject.put("movieInformation",movieInformation);
+        listObject.put("movieInformation", movieInformation);
         movieTrailerTask.setListObject(listObject);
         movieTrailerTask.execute();
     }
@@ -239,7 +238,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
     private void LoadReviews(int idMovie) {
         Map<String, String> urlParam = new HashMap<>();
         urlParam.put("api_key", getString(R.string.apiKey));
-        urlParam.put("/","reviews");
+        urlParam.put("/", "reviews");
         urlParam.put("", String.valueOf(idMovie));
         MovieReviewsTask movieReviewsTask = new MovieReviewsTask("https://api.themoviedb.org/3/movie/", Constants.METHOD_GET, urlParam);
         movieReviewsTask.setJSON(false);
@@ -247,7 +246,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         Map<String, Object> listObject = new HashMap<>();
         listObject.put("idMovie", movieInformation.getId());
         listObject.put("reviewAdapter", reviewAdapter);
-        listObject.put("movieInformation",movieInformation);
+        listObject.put("movieInformation", movieInformation);
         movieReviewsTask.setListObject(listObject);
         movieReviewsTask.execute();
     }
@@ -295,30 +294,36 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             gifImageView.setImageResource(R.drawable.loadingspinner);
 
 
-
         List<MovieInformation> informationList = MovieContractor.MovieEntry.getAllDataFromCursor(data);
         if (!informationList.isEmpty()) {
             movieInformation = informationList.get(0);
 
-            if(movieInformation.isReviewLoaded()){
-                Uri uri = MovieContractor.ReviewEntry.buildReviewUriFromMovieId(movieInformation.getId());
-                Cursor c = getContext().getContentResolver().query(uri,REVIEW_ENTRY,null,null,null);
-                List<Review> list = MovieContractor.ReviewEntry.convertToList(c);
-                reviewAdapter.setData(list);
-            }else{
+            if (movieInformation.isReviewLoaded()) {
+                String whereClause = MovieContractor.ReviewEntry.COLUMN_REVIEWS_ID_MOVIE + " = ?";
+                Cursor c = getContext().getContentResolver().query(MovieContractor.ReviewEntry.CONTENT_URI, REVIEW_ENTRY, whereClause, new String[]{String.valueOf(movieInformation.getId())}, null);
+                List<Review> listReviewData = MovieContractor.ReviewEntry.convertToList(c);
+                if (!listReviewData.isEmpty())
+                    reviewAdapter.setData(listReviewData);
+            } else {
                 LoadReviews(movieInformation.getId());
             }
 
-            if(movieInformation.isTrailerLoaded()){
-                Uri uri = MovieContractor.TrailerEntry.buildTrailerUriFromMovieId(movieInformation.getId());
-                Cursor c = getContext().getContentResolver().query(uri,TRAILER_ENTRY,null,null,null);
-                List<Trailer> list = MovieContractor.TrailerEntry.convertToList(c);
-                trailerAdapter.setData(list);
-            }else{
+            if (movieInformation.isTrailerLoaded()) {
+                String whereClause = MovieContractor.TrailerEntry.COLUMN_TRAILER_MOVIE_ID + "= ?";
+                Cursor c = getContext().getContentResolver().query(MovieContractor.TrailerEntry.CONTENT_URI, TRAILER_ENTRY, whereClause, new String[]{String.valueOf(movieInformation.getId())}, null);
+                List<Trailer> listTrailerData = MovieContractor.TrailerEntry.convertToList(c);
+                if (!listTrailerData.isEmpty())
+                    trailerAdapter.setData(listTrailerData);
+            } else {
                 LoadTrailer(movieInformation.getId());
             }
 
-            LoadImage();
+            if (movieInformation.getBackdropPathBitmap() != null) {
+                gifImageView.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getBackdropPathBitmap(), 0, movieInformation.getBackdropPathBitmap().length)).getBitmap());
+            } else {
+                LoadImage();
+            }
+
             if (movieInformation.getDuration() == 0)
                 LoadMovieDetail(movieInformation.getId());
             else
@@ -340,7 +345,13 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             if (markAsFavorite != null && movieInformation.isMarkAsFavorite()) {
                 markAsFavorite.setText(getString(R.string.favoriteMovie));
             }
+
+            if (synopsisContent != null && movieInformation.getOverView() != null)
+                synopsisContent.setText(movieInformation.getOverView());
+
+            toolbarLayout.setTitle(movieInformation.getTitle());
             getActivity().setTitle(movieInformation.getTitle());
+
         }
 
     }
@@ -353,6 +364,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        int DETAIL_LOADER = 1;
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -394,5 +406,10 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             getContext().getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformation.getId()), contentValues, whereClause, value);
 
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

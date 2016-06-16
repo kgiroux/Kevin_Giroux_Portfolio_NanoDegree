@@ -78,7 +78,6 @@ public class MovieContentProvider extends ContentProvider {
             case MOVIE_ALL :
                 retCursor = getMovieAllMovie();
                 break;
-
             case MOVIE_LASTEST :
                 retCursor = getLastestMovieOrder(projection);
                 break;
@@ -86,15 +85,15 @@ public class MovieContentProvider extends ContentProvider {
             case MOVIE_BY_FAVORITE :
                 retCursor = getMovieByFavorite(projection);
                 break;
-            case TRAILER_BY_MOVIE :
+            case TRAILER:
                 retCursor = getTrailerByMovie(projection,selection,selectionArgs);
                 break;
-            case REVIEW_BY_MOVIE :
+            case REVIEW:
                 retCursor = getReviewByMovie(projection,selection,selectionArgs);
                 break;
             case FAVORITE :
-            case TRAILER :
-            case REVIEW :
+            case REVIEW_BY_MOVIE:
+            case TRAILER_BY_MOVIE:
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
 
@@ -125,6 +124,12 @@ public class MovieContentProvider extends ContentProvider {
                 return  MovieContractor.TrailerEntry.CONTENT_TYPE;
             case TRAILER_BY_MOVIE :
                 return MovieContractor.TrailerEntry.CONTENT_TYPE;
+
+            case REVIEW:
+                return MovieContractor.TrailerEntry.CONTENT_TYPE;
+            case REVIEW_BY_MOVIE:
+                return MovieContractor.ReviewEntry.CONTENT_TYPE;
+
             default:
                 throw new UnsupportedOperationException("Unkown uri : " + uri);
         }

@@ -20,10 +20,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivity" />
         </activity>
-        <activity
-            android:name=".activity.popularMovies.MovieDetailActivity"
-            android:label="@string/title_activity_movie_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name=".database.MovieContentProvider"

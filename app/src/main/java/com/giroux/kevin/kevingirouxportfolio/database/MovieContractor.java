@@ -6,9 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
 
-import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.DetailsActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.PopularActivityFragment;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
@@ -78,6 +76,7 @@ public class MovieContractor {
                     trailer.setType(c.getString(DetailsActivityFragment.COLUMN_TRAILER_TYPE));
                     trailer.setYoutubeKey(c.getString(DetailsActivityFragment.COLUMN_TRAILER_KEY_YOUTUBE));
                     trailer.setYoutube(c.getInt(DetailsActivityFragment.COLUMN_TRAILER_IS_YOUTUBE));
+                    trailer.setName(c.getString(DetailsActivityFragment.COLUMN_TRAILER_NAME));
                     trailerList.add(trailer);
                 }
             }
@@ -163,7 +162,8 @@ public class MovieContractor {
         public static final String COLUMN_MOVIE_TRAILER_LOADED ="isTrailer";
         // Movie Review Load
         public static final String COLUMN_MOVIE_REVIEW_LOADED ="isReview";
-
+        // Movie background
+        public static final String COLUMN_MOVIE_BACKGROUND = "background";
         // Content URI
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
 
@@ -236,6 +236,7 @@ public class MovieContractor {
                     movieInformation.setDate_query_db(c.getDouble(DetailsActivityFragment.COLUMN_MOVIE_DATE_QUERY_MOVIEDB));
                     movieInformation.setTrailerLoaded(c.getInt(DetailsActivityFragment.COLUMN_MOVIE_TRAILER_LOADED));
                     movieInformation.setReviewLoaded(c.getInt(DetailsActivityFragment.COLUMN_MOVIE_REVIEW_LOADED));
+                    movieInformation.setBackdropPathBitmap(c.getBlob(DetailsActivityFragment.COLUMN_MOVIE_BACKDROP));
                     movieInformationList.add(movieInformation);
                 }
             }

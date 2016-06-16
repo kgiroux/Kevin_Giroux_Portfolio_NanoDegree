@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
 import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.interfaces.OnCustomItemClickListener;
 
@@ -22,7 +23,7 @@ public class PopularActivity extends AppCompatActivity implements OnCustomItemCl
         setContentView(R.layout.activity_popular);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        setTitle(getString(R.string.popularMovie));
         FrameLayout movieDetail = (FrameLayout) findViewById(R.id.movieDetail);
         if(movieDetail != null){
             mTwoPane = true;
@@ -33,7 +34,8 @@ public class PopularActivity extends AppCompatActivity implements OnCustomItemCl
             }
         }else{
             mTwoPane = false;
-            getSupportActionBar().setElevation(0f);
+            if(getSupportActionBar() != null)
+                getSupportActionBar().setElevation(0f);
         }
         PopularActivityFragment ff = (PopularActivityFragment)getSupportFragmentManager().findFragmentById(R.id.idMovieFragment);
         ff.setmTwoPane(!mTwoPane);
@@ -75,8 +77,7 @@ public class PopularActivity extends AppCompatActivity implements OnCustomItemCl
                     .replace(R.id.movieDetail, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
-            Intent intent = new Intent(this, DetailsActivity.class)
-                    .setData(uri);
+            Intent intent = new Intent(this, DetailsActivity.class).setData(uri);
             startActivity(intent);
         }
     }

@@ -1,5 +1,6 @@
 package com.giroux.kevin.kevingirouxportfolio.network;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
+import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 
 import java.util.Map;
 
@@ -40,6 +42,12 @@ public class MovieImageDetailsTask extends AndroidHttpRequest {
                 if(image != null){
                     imageView.setImageBitmap(bitmapDrawable.getBitmap());
                 }
+                int idMovie = (int) this.getListObject().get("idMovie");
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_BACKGROUND, bytes);
+                String value[] = new String[]{Integer.toString(idMovie)};
+                String whereClause = MovieContractor.MovieEntry._ID + "=?";
+                context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(idMovie), contentValues, whereClause, value);
             }
         }
     }

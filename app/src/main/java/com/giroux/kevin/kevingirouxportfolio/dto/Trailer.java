@@ -93,7 +93,7 @@ public class Trailer {
 
 
                     if(trailer.has("name"))
-                        trailerMovie.setYoutubeKey(trailer.getString("name"));
+                        trailerMovie.setName(trailer.getString("name"));
 
                     if(trailer.has("site")){
                         if(trailer.getString("site").equals("Youtube")){

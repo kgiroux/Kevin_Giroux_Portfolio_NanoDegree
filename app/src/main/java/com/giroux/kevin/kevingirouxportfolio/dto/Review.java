@@ -89,8 +89,8 @@ public class Review {
         for(Review r : list){
             ContentValues contentValue = new ContentValues();
             contentValue.put(MovieContractor.ReviewEntry.COLUMN_REVIEWS_ID_MOVIE,r.getIdMovie());
-            contentValue.put(MovieContractor.ReviewEntry.COLUMN_REVIEWS_CONTENT,r.getNameReviewer());
-            contentValue.put(MovieContractor.ReviewEntry.COLUMN_REVIEWS_NAME,r.getContent());
+            contentValue.put(MovieContractor.ReviewEntry.COLUMN_REVIEWS_NAME, r.getNameReviewer());
+            contentValue.put(MovieContractor.ReviewEntry.COLUMN_REVIEWS_CONTENT, r.getContent());
             cVVector.add(contentValue);
         }
         return cVVector;

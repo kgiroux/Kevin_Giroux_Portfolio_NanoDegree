@@ -2,16 +2,13 @@ package com.giroux.kevin.kevingirouxportfolio.network;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
-import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.kevingirouxportfolio.adapter.TrailerAdapter;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.dto.Trailer;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;

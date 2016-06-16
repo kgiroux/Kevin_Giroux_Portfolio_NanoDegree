@@ -1,17 +1,11 @@
 package com.giroux.kevin.kevingirouxportfolio.ViewHolder;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
-import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.kevingirouxportfolio.R;
-import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.DetailsActivity;
-import com.giroux.kevin.kevingirouxportfolio.activity.popularMovies.MovieDetailActivity;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.interfaces.OnCustomItemClickListener;
@@ -24,11 +18,6 @@ import pl.droidsonroids.gif.GifImageView;
 public class ViewHolderMovie extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private GifImageView imageMovie;
-    private boolean mTwoPane;
-
-    public void setmTwoPane(boolean mTwoPane) {
-        this.mTwoPane = mTwoPane;
-    }
 
     private int mPosition;
     private Activity activity;
