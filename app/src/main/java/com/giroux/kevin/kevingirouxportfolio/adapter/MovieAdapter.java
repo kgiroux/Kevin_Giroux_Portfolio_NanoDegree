@@ -61,14 +61,13 @@ public class MovieAdapter extends RecyclerView.Adapter {
                 urlParams.put("",listObjects.get(position).getPosterPath());
                 MovieImageTask movieImageTask = new MovieImageTask("http://image.tmdb.org/t/p/w500/", Constants.METHOD_GET,urlParams);
                 movieImageTask.setJSON(false);
-                movieImageTask.setContext(this.mActivtiy.getApplicationContext());
+                movieImageTask.setActivity(this.mActivtiy);
                 movieImageTask.setTypeMine(TypeMine.IMAGE_WEBP);
                 movieImageTask.addUIObjectToUpdate("ViewHolder",holder);
                 movieImageTask.addUIObjectToUpdate("listMovie",listObjects);
                 movieImageTask.execute();
             }
             ((ViewHolderMovie)holder).setMPosition(position);
-            ((ViewHolderMovie)holder).setmTwoPane(this.mTwoPane);
             ((ViewHolderMovie)holder).setActivity(this.mActivtiy);
             ((ViewHolderMovie)holder).setMovieInformation(listObjects.get(position));
             ((ViewHolderMovie)holder).getImageMovie().setContentDescription(listObjects.get(position).getTitle());

@@ -8,6 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
+import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
+import com.giroux.kevin.kevingirouxportfolio.database.AsyncDeleteUpdate;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 
 import java.util.Map;
@@ -47,7 +49,14 @@ public class MovieImageDetailsTask extends AndroidHttpRequest {
                 contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_BACKGROUND, bytes);
                 String value[] = new String[]{Integer.toString(idMovie)};
                 String whereClause = MovieContractor.MovieEntry._ID + "=?";
-                context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(idMovie), contentValues, whereClause, value);
+
+                AsyncDeleteUpdate asyncDeleteUpdate = new AsyncDeleteUpdate(context);
+                asyncDeleteUpdate.setMethod(MethodDatabase.UPDATE);
+                asyncDeleteUpdate.setUri(MovieContractor.MovieEntry.buildMovieUri(idMovie));
+                asyncDeleteUpdate.setContentValues(contentValues);
+                asyncDeleteUpdate.setWhereClause(whereClause);
+                asyncDeleteUpdate.setValue(value);
+                asyncDeleteUpdate.execute();
             }
         }
     }

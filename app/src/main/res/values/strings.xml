@@ -35,5 +35,7 @@
     <string name="favoriteMovie">Favorite Movie</string>
     <string name="popularMovie">Popular Movie</string>
     <string name="synopsis">Synopsis</string>
+    <string name="warningIntent">No webbrowser or Youtube app found for performing this action</string>
+    <string name="nbRowConcernByDatabaseOperation">Nb row concerned by the operation </string>
 
 </resources>

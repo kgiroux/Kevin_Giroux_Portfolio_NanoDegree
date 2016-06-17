@@ -180,10 +180,9 @@ public class MovieContractor {
             return CONTENT_URI.buildUpon().appendPath("/*").build();
         }
 
-        public static Uri buildUriLastestMovies(){
-            return CONTENT_URI.buildUpon().appendEncodedPath("lastest").build();
+        public static Uri buildUriSettingsMovies(){
+            return CONTENT_URI.buildUpon().appendEncodedPath("settings").build();
         }
-
 
         public static long getIdFromUri(Uri uri){
             String idToReturn = uri.getPathSegments().get(1);

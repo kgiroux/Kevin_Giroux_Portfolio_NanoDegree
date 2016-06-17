@@ -1,8 +1,12 @@
 package com.giroux.kevin.kevingirouxportfolio.Utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
+import com.giroux.kevin.kevingirouxportfolio.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -61,6 +65,11 @@ public class Utility {
             Log.e(Constants.TAG_UTILITY,"Error during parsing date",e);
         }
         return dateInString;
+    }
+
+    public static String getPreferredOrderMovie(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return  preferences.getString(context.getString(R.string.pref_list_key),context.getString(R.string.pref_list_default));
     }
 
 }

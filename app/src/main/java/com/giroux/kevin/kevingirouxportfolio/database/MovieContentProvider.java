@@ -25,7 +25,8 @@ public class MovieContentProvider extends ContentProvider {
     private static final int MOVIE_ALL = 101;
     private static final int MOVIE_LASTEST = 102;
     private static final int MOVIE_BY_FAVORITE = 103;
-    private static final int MOVIE_INSERT = 104;
+    private static final int MOVIE_ID = 104;
+    private static final int MOVIE_SETTINGS = 105;
     private static final int FAVORITE = 150;
     private static final int TRAILER = 200;
     private static final int TRAILER_BY_MOVIE = 201;
@@ -49,10 +50,11 @@ public class MovieContentProvider extends ContentProvider {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContractor.CONTENT_AUTHORITY;
-        matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/#" , MOVIE);
+        matcher.addURI(authority, MovieContractor.PATH_MOVIE , MOVIE);
+        matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/#", MOVIE_ID);
+        matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/settings", MOVIE_SETTINGS);
         matcher.addURI(authority, MovieContractor.PATH_MOVIE + "/lastest",MOVIE_LASTEST);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE + "/*", MOVIE_ALL);
-        matcher.addURI(authority, MovieContractor.PATH_MOVIE , MOVIE_INSERT);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE, FAVORITE);
         matcher.addURI(authority, MovieContractor.PATH_FAVORITE + "/*", MOVIE_BY_FAVORITE);
         matcher.addURI(authority, MovieContractor.PATH_TRAILER,TRAILER);
@@ -72,8 +74,8 @@ public class MovieContentProvider extends ContentProvider {
         Cursor retCursor;
         switch (match){
 
-            case MOVIE :
-                retCursor = getMovieById(uri,projection);
+            case MOVIE_SETTINGS :
+                retCursor = getMovieBySetting(projection,selection,selectionArgs,sortOrder);
                 break;
             case MOVIE_ALL :
                 retCursor = getMovieAllMovie();
@@ -81,9 +83,11 @@ public class MovieContentProvider extends ContentProvider {
             case MOVIE_LASTEST :
                 retCursor = getLastestMovieOrder(projection);
                 break;
-
             case MOVIE_BY_FAVORITE :
                 retCursor = getMovieByFavorite(projection);
+                break;
+            case MOVIE_ID :
+                retCursor = getMovieById(uri,projection);
                 break;
             case TRAILER:
                 retCursor = getTrailerByMovie(projection,selection,selectionArgs);
@@ -92,6 +96,7 @@ public class MovieContentProvider extends ContentProvider {
                 retCursor = getReviewByMovie(projection,selection,selectionArgs);
                 break;
             case FAVORITE :
+            case MOVIE :
             case REVIEW_BY_MOVIE:
             case TRAILER_BY_MOVIE:
             default:
@@ -110,8 +115,6 @@ public class MovieContentProvider extends ContentProvider {
     public String getType(@NonNull final Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case MOVIE_INSERT :
-                return MovieContractor.MovieEntry.CONTENT_TYPE;
             case MOVIE:
                 return MovieContractor.MovieEntry.CONTENT_TYPE;
             case MOVIE_ALL:
@@ -124,7 +127,8 @@ public class MovieContentProvider extends ContentProvider {
                 return  MovieContractor.TrailerEntry.CONTENT_TYPE;
             case TRAILER_BY_MOVIE :
                 return MovieContractor.TrailerEntry.CONTENT_TYPE;
-
+            case MOVIE_SETTINGS :
+                return MovieContractor.MovieEntry.CONTENT_TYPE;
             case REVIEW:
                 return MovieContractor.TrailerEntry.CONTENT_TYPE;
             case REVIEW_BY_MOVIE:
@@ -144,7 +148,7 @@ public class MovieContentProvider extends ContentProvider {
         Uri returnUri;
 
         switch (match) {
-            case MOVIE_INSERT: {
+            case MOVIE: {
                 _id = db.insert(MovieContractor.MovieEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = MovieContractor.MovieEntry.buildMovieUri(_id);
@@ -233,6 +237,7 @@ public class MovieContentProvider extends ContentProvider {
 
         switch (match){
             case MOVIE :
+            case MOVIE_ID :
                 rowsUpdated = db.update(MovieContractor.MovieEntry.TABLE_NAME,values,selection,selectionArgs);
                 break;
             case FAVORITE :
@@ -262,7 +267,7 @@ public class MovieContentProvider extends ContentProvider {
         int returnCount = 0;
 
         switch (match) {
-            case MOVIE_INSERT:
+            case MOVIE:
                 db.beginTransaction();
                 try {
                     for (ContentValues value : values) {
@@ -321,8 +326,13 @@ public class MovieContentProvider extends ContentProvider {
         super.shutdown();
     }
 
+    private Cursor getMovieBySetting( String[] projection, String selection, String[] selectionArgs, String sortOrder){
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(MovieContractor.MovieEntry.TABLE_NAME);
+        return builder.query(movieDbHelper.getReadableDatabase(),projection,selection,selectionArgs,null,null,sortOrder);
+    }
 
-    private Cursor getMovieById(Uri uri, String[] projection) {
+    private Cursor getMovieById(Uri uri, String [] projection){
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(MovieContractor.MovieEntry.TABLE_NAME);
         String[] selectionArgs;
@@ -338,6 +348,7 @@ public class MovieContentProvider extends ContentProvider {
 
         return builder.query(movieDbHelper.getReadableDatabase(),projection,selection,selectionArgs,null,null,null);
     }
+
 
     private Cursor getMovieAllMovie() {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();

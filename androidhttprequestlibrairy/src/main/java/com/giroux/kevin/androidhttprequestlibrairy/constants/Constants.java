@@ -21,6 +21,7 @@ public class Constants {
     public static final String MOVIE_ADAPTER ="Movie Adapter" ;
     public static final String TAG_MOVIE_FULL = "MOVIE_FULL";
     public static final String TAG_UTILITY = "UTILITY" ;
+    public static final String TAG_CURSOR_DELETE_UPDATE = "ASYNC_DELETE_UPDATE";
 
     private Constants() throws InstantiationException{throw new InstantiationError();}
     public static final String TAG_ANDROID_HTTP_REQUEST = "Android HTTP request";

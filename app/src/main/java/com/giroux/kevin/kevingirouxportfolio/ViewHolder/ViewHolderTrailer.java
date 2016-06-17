@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.dto.Trailer;
@@ -45,11 +46,21 @@ public class ViewHolderTrailer extends RecyclerView.ViewHolder implements View.O
         if (v.getId() == R.id.linearLayout) {
             try {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer.getYoutubeKey()));
-                context.startActivity(intent);
+
+                if(intent.resolveActivity(context.getPackageManager()) != null){
+                    context.startActivity(intent);
+                }
+
+
             } catch (ActivityNotFoundException ex) {
                 Intent intent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse("http://www.youtube.com/watch?v=" + trailer.getYoutubeKey()));
-                context.startActivity(intent);
+                if(intent.resolveActivity(context.getPackageManager()) != null) {
+
+                    context.startActivity(intent);
+                }else{
+                    Toast.makeText(context,context.getString(R.string.warningIntent),Toast.LENGTH_LONG).show();
+                }
             }
         }
 

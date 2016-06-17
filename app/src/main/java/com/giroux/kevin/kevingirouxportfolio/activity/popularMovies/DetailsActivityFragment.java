@@ -1,10 +1,12 @@
 package com.giroux.kevin.kevingirouxportfolio.activity.popularMovies;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,6 +17,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,10 @@ import com.giroux.kevin.kevingirouxportfolio.R;
 import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.adapter.ReviewAdapter;
 import com.giroux.kevin.kevingirouxportfolio.adapter.TrailerAdapter;
+import com.giroux.kevin.androidhttprequestlibrairy.AsyncCursor;
+import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
+import com.giroux.kevin.kevingirouxportfolio.database.AsyncQueryReview;
+import com.giroux.kevin.kevingirouxportfolio.database.AsyncQueryTrailer;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.dto.Review;
@@ -53,6 +60,7 @@ import pl.droidsonroids.gif.GifImageView;
 public class DetailsActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
 
     static String DETAIL_URI = "Detail Activity Movie";
+    private int DETAIL_LOADER = 1;
     @BindView(R.id.movieDetail)
     @Nullable
     CoordinatorLayout movieDetail;
@@ -113,9 +121,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             MovieContractor.MovieEntry.COLUMN_MOVIE_REVIEW_LOADED,
             MovieContractor.MovieEntry.COLUMN_MOVIE_BACKGROUND
     };
-    @BindView(R.id.synopsisContent)
-    private TextView synopsisContent;
-    @BindView(R.id.rootViewDetail)
+    @BindView(R.id.synopsisContent) TextView synopsisContent;
 
     private static String[] REVIEW_ENTRY = {
             MovieContractor.ReviewEntry._ID,
@@ -181,6 +187,12 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         if (toolbarLayout == null) {
             toolbarLayout = (CollapsingToolbarLayout) container.findViewById(R.id.toolbar_layout);
         }
+
+        Toolbar toolbar = (Toolbar) container.findViewById(R.id.toolbar);
+        if(toolbar != null)
+            toolbar.setNavigationIcon(R.drawable.keyboard_backspace);
+
+
         markAsFavorite.setOnClickListener(this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -299,21 +311,33 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             movieInformation = informationList.get(0);
 
             if (movieInformation.isReviewLoaded()) {
+                Log.e("LOG","LOG_UPDATE AsyncQueryReview");
                 String whereClause = MovieContractor.ReviewEntry.COLUMN_REVIEWS_ID_MOVIE + " = ?";
-                Cursor c = getContext().getContentResolver().query(MovieContractor.ReviewEntry.CONTENT_URI, REVIEW_ENTRY, whereClause, new String[]{String.valueOf(movieInformation.getId())}, null);
-                List<Review> listReviewData = MovieContractor.ReviewEntry.convertToList(c);
-                if (!listReviewData.isEmpty())
-                    reviewAdapter.setData(listReviewData);
+                AsyncQueryReview asyncQueryReview = new AsyncQueryReview(getContext());
+                asyncQueryReview.setValue( new String[]{String.valueOf(movieInformation.getId())});
+                asyncQueryReview.setUri(MovieContractor.ReviewEntry.CONTENT_URI);
+                asyncQueryReview.setProjection(REVIEW_ENTRY);
+                asyncQueryReview.setWhereClause(whereClause);
+                asyncQueryReview.setMethod(MethodDatabase.QUERY);
+                asyncQueryReview.setObject("reviewAdapter",reviewAdapter);
+                asyncQueryReview.execute();
             } else {
                 LoadReviews(movieInformation.getId());
             }
 
             if (movieInformation.isTrailerLoaded()) {
+                Log.e("LOG","LOG_UPDATE asyncQueryTrailer");
                 String whereClause = MovieContractor.TrailerEntry.COLUMN_TRAILER_MOVIE_ID + "= ?";
-                Cursor c = getContext().getContentResolver().query(MovieContractor.TrailerEntry.CONTENT_URI, TRAILER_ENTRY, whereClause, new String[]{String.valueOf(movieInformation.getId())}, null);
-                List<Trailer> listTrailerData = MovieContractor.TrailerEntry.convertToList(c);
-                if (!listTrailerData.isEmpty())
-                    trailerAdapter.setData(listTrailerData);
+                AsyncQueryTrailer asyncQueryTrailer = new AsyncQueryTrailer(getContext());
+                asyncQueryTrailer.setValue( new String[]{String.valueOf(movieInformation.getId())});
+                asyncQueryTrailer.setUri(MovieContractor.TrailerEntry.CONTENT_URI);
+                asyncQueryTrailer.setProjection(TRAILER_ENTRY);
+                asyncQueryTrailer.setWhereClause(whereClause);
+                asyncQueryTrailer.setMethod(MethodDatabase.QUERY);
+                asyncQueryTrailer.setObject("trailerAdapter",trailerAdapter);
+                asyncQueryTrailer.execute();
+
+
             } else {
                 LoadTrailer(movieInformation.getId());
             }
@@ -364,7 +388,7 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        int DETAIL_LOADER = 1;
+
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -375,6 +399,13 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             case R.id.markAsFavorite:
                 markasFavorite();
                 break;
+            case R.id.toolbar :
+                Intent intent = new Intent(getActivity(),PopularActivity.class);
+                if(Build.VERSION.SDK_INT> 21 )
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                else
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
         }
     }
 
@@ -399,17 +430,32 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
             }
 
             movieInformation.setMarkAsFavorite(!movieInformation.isMarkAsFavorite());
+
             contentValues = new ContentValues();
             contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_MARK_AS_FAVORITE, movieInformation.isMarkAsFavorite());
             String value[] = new String[]{Integer.toString(movieInformation.getId())};
             String whereClause = MovieContractor.MovieEntry._ID + "=?";
-            getContext().getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformation.getId()), contentValues, whereClause, value);
-
+            Log.e("LOG","LOG_UPDATE FAVORITE MARK AS FAVORITE");
+            AsyncCursor asyncCursor = new AsyncCursor(getContext());
+            asyncCursor.setContentValues(contentValues);
+            asyncCursor.setValue(value);
+            asyncCursor.setWhereClause(whereClause);
+            asyncCursor.setUri(MovieContractor.MovieEntry.buildMovieUri(movieInformation.getId()));
+            asyncCursor.setMethod(MethodDatabase.UPDATE);
+            asyncCursor.execute();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    public void setPreferenceChange() {
+
+
+        if(getLoaderManager() != null)
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+
     }
 }

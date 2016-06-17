@@ -57,19 +57,5 @@ public class ViewHolderMovie extends RecyclerView.ViewHolder implements View.OnC
     public void onClick(View v) {
         Uri uri = MovieContractor.MovieEntry.buildMovieUri(movieInformation.getId());
         ((OnCustomItemClickListener)activity).onItemSelected(uri);
-        /*if(this.mTwoPane){
-
-
-        }else{
-            Log.e(Constants.VIEW_HOLDER_MOVIE,"TEST : " + getMPosition());
-
-            Intent t = new Intent(activity.getApplicationContext(), DetailsActivity.class);
-            t.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            t.putExtra("movieInformation",movieInformation);
-            activity.startActivity(t);
-        }*/
-
-
-
     }
 }

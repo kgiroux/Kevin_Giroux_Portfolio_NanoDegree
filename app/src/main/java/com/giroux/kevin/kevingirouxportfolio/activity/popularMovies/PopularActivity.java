@@ -10,13 +10,14 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
+import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.interfaces.OnCustomItemClickListener;
 
 public class PopularActivity extends AppCompatActivity implements OnCustomItemClickListener{
 
     private static boolean mTwoPane = false;
     private String DETAILFRAGMENT_TAG = "DETAILFRAGMENT";
-
+    private String mPreferenceMovie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,12 @@ public class PopularActivity extends AppCompatActivity implements OnCustomItemCl
         setSupportActionBar(toolbar);
         setTitle(getString(R.string.popularMovie));
         FrameLayout movieDetail = (FrameLayout) findViewById(R.id.movieDetail);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey("preferenceMovie"))
+            mPreferenceMovie = savedInstanceState.getString("preferenceMovie");
+        else
+            mPreferenceMovie = Utility.getPreferredOrderMovie(getApplicationContext());
+
         if(movieDetail != null){
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -60,6 +67,27 @@ public class PopularActivity extends AppCompatActivity implements OnCustomItemCl
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+
+        String preferencesString = Utility.getPreferredOrderMovie(getApplicationContext());
+        if(preferencesString != null && !mPreferenceMovie.equals(preferencesString)){
+            PopularActivityFragment popularActivityFragment = (PopularActivityFragment) getSupportFragmentManager().findFragmentById(R.id.idMovieFragment);
+            mPreferenceMovie = preferencesString;
+            if(null != popularActivityFragment){
+                popularActivityFragment.onPreferenceChange();
+            }
+
+            DetailsActivityFragment detailsActivityFragment = (DetailsActivityFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if(detailsActivityFragment != null){
+                detailsActivityFragment.setPreferenceChange();
+            }
+
+        }
+
+
+        super.onResume();
+    }
 
     @Override
     public void onItemSelected(Uri uri) {

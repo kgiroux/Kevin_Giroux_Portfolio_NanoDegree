@@ -8,8 +8,11 @@ import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
+import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.kevingirouxportfolio.R;
+import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.adapter.MovieAdapter;
+import com.giroux.kevin.kevingirouxportfolio.database.AsyncBulkInsertMovie;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 
@@ -54,8 +57,7 @@ public class MovieTask extends AndroidHttpRequest {
         try{
             JSONArray object = o.getJSONArray("results");
             Vector<ContentValues> cVVector = new Vector<>(object.length());
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            String preferencesString = preferences.getString(context.getString(R.string.pref_list_key),context.getString(R.string.pref_list_default));
+            String preferencesString = Utility.getPreferredOrderMovie(context);
             for(int i = 0; i<object.length(); i++){
                 JSONObject temp = object.getJSONObject(i);
 
@@ -106,8 +108,12 @@ public class MovieTask extends AndroidHttpRequest {
             if(cVVector.size() > 0){
                 ContentValues [] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
-                if(context.getContentResolver() != null)
-                    insertedRow = context.getContentResolver().bulkInsert(MovieContractor.MovieEntry.CONTENT_URI,cvArray);
+                AsyncBulkInsertMovie asyncBulkInsertMovie = new AsyncBulkInsertMovie(context);
+                asyncBulkInsertMovie.setMethod(MethodDatabase.BULK_INSERT);
+                asyncBulkInsertMovie.setUri(MovieContractor.MovieEntry.CONTENT_URI);
+                asyncBulkInsertMovie.setContentValuesBulkInsert(cvArray);
+                asyncBulkInsertMovie.execute();
+
             }
             if(Log.isLoggable(Constants.TAG_MOVIE_TASK,Log.INFO))
                 Log.i(Constants.TAG_MOVIE_TASK,"Nb rows inserted : " + insertedRow );

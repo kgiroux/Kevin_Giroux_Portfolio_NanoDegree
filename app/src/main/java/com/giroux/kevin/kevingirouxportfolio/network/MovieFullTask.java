@@ -6,8 +6,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
+import com.giroux.kevin.androidhttprequestlibrairy.AsyncCursor;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
+import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
+import com.giroux.kevin.kevingirouxportfolio.database.AsyncDeleteUpdate;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 
@@ -46,7 +49,14 @@ public class MovieFullTask extends AndroidHttpRequest {
                         contentValues.put(MovieContractor.MovieEntry.COLUMN_MOVIE_DURATION,movieInformation.getDuration());
                         String value [] = new String[]{Integer.toString(movieInformation.getId())};
                         String whereClause = MovieContractor.MovieEntry._ID + "=?";
-                        context.getContentResolver().update(MovieContractor.MovieEntry.buildMovieUri(movieInformation.getId()),contentValues,whereClause,value);
+
+                        AsyncDeleteUpdate asyncDeleteUpdate = new AsyncDeleteUpdate(context);
+                        asyncDeleteUpdate.setMethod(MethodDatabase.UPDATE);
+                        asyncDeleteUpdate.setUri(MovieContractor.MovieEntry.buildMovieUri(movieInformation.getId()));
+                        asyncDeleteUpdate.setContentValues(contentValues);
+                        asyncDeleteUpdate.setWhereClause(whereClause);
+                        asyncDeleteUpdate.setValue(value);
+                        asyncDeleteUpdate.execute();
 
                         TextView textView = (TextView)this.getListObject().get("durationTv");
                         textView.setText(Utility.formatDuration(movieInformation.getDuration()));
