@@ -6,10 +6,9 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
-import com.giroux.kevin.androidhttprequestlibrairy.AsyncCursor;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
-import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
+import com.giroux.kevin.kevingirouxportfolio.utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncDeleteUpdate;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;

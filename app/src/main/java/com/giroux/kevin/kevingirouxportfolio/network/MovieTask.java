@@ -2,15 +2,12 @@ package com.giroux.kevin.kevingirouxportfolio.network;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.giroux.kevin.androidhttprequestlibrairy.AndroidHttpRequest;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
-import com.giroux.kevin.kevingirouxportfolio.R;
-import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
+import com.giroux.kevin.kevingirouxportfolio.utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.adapter.MovieAdapter;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncBulkInsertMovie;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;

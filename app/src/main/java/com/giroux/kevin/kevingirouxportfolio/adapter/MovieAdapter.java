@@ -38,9 +38,8 @@ public class MovieAdapter extends RecyclerView.Adapter {
         this.mTwoPane = mTwoPane;
     }
 
-    public MovieAdapter(Activity activtiy, List<MovieInformation> listObjects){
+    public MovieAdapter(Activity activtiy){
         this.mActivtiy = activtiy;
-        this.listObjects = listObjects;
     }
 
     @Override

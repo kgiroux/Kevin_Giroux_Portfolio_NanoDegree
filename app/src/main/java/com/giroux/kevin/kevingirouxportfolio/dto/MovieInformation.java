@@ -190,7 +190,8 @@ public class MovieInformation implements Parcelable {
     }
 
     public MovieInformation() {
-
+        this.backdropPathBitmap = new byte[10];
+        this.posterBitmap = new byte[10];
     }
 
     private void readFromParcel(Parcel in) {
@@ -224,12 +225,18 @@ public class MovieInformation implements Parcelable {
         dest.writeString(originalTitle);
         dest.writeString(releaseDate);
         dest.writeString(overView);
-        dest.writeInt(posterBitmap.length);
+        if(posterBitmap != null)
+            dest.writeInt(posterBitmap.length);
+        else
+            dest.writeInt(10);
         dest.writeByteArray(posterBitmap);
         dest.writeDouble(userRating);
         dest.writeString(backdropPath);
         dest.writeString(posterPath);
-        dest.writeInt(backdropPathBitmap.length);
+        if(backdropPathBitmap != null)
+            dest.writeInt(backdropPathBitmap.length);
+        else
+            dest.writeInt(10);
         dest.writeByteArray(backdropPathBitmap);
     }
 

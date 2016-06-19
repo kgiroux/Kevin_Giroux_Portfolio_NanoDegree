@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.giroux.kevin.kevingirouxportfolio.R;
-import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
+import com.giroux.kevin.kevingirouxportfolio.utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.interfaces.OnCustomItemClickListener;
 
 public class PopularActivity extends AppCompatActivity implements OnCustomItemClickListener{

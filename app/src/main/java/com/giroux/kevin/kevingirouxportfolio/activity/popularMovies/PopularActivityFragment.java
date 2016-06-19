@@ -20,17 +20,16 @@ import android.view.ViewGroup;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.kevingirouxportfolio.R;
-import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.adapter.MovieAdapter;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncRefreshData;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
 import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.interfaces.Callback;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieTask;
+import com.giroux.kevin.kevingirouxportfolio.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -48,6 +47,8 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
     SwipeRefreshLayout layout;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    ArrayList<MovieInformation> listMovie;
+    private Uri mUri;
     private boolean mTwoPane = false;
 
     private static String[] MOVIE_COLUMNS = {
@@ -100,10 +101,24 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View viewRoot = inflater.inflate(R.layout.fragment_popular, container, false);
         ButterKnife.bind(this, viewRoot);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey("mUri")){
+            mUri = savedInstanceState.getParcelable("mUri");
+            restartLoader();
+            listMovie = new ArrayList<>();
+        }else{
+            listMovie = new ArrayList<>();
+        }
+
         if (layout != null) {
             layout.setOnRefreshListener(this);
             layout.setColorSchemeResources(
@@ -116,13 +131,11 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(layoutManager);
 
-            movieAdapter = new MovieAdapter(getActivity(), new ArrayList<MovieInformation>());
+            movieAdapter = new MovieAdapter(getActivity());
             movieAdapter.setmTwoPane(mTwoPane);
             recyclerView.setAdapter(movieAdapter);
-
+            movieAdapter.setData(listMovie);
         }
-
-
         return viewRoot;
 
     }
@@ -183,20 +196,15 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
 
         AsyncRefreshData asyncRefreshData = new AsyncRefreshData(getContext());
 
-        Log.e("LOG","LOG_QUERY CHANGE PREF");
-
         String sortOrder = MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
         String preferredOrderMovieSetting = Utility.getPreferredOrderMovie(getActivity());
         if(preferredOrderMovieSetting.equals("favoriteMovies")){
-            Log.e("LOG","LOG_QUERY CHANGE PREF favoriteMovies");
             asyncRefreshData.setUri(MovieContractor.FavoriteEntry.buildFavoriteByIdMovie());
             asyncRefreshData.setProjection(MOVIE_COLUMNS_INNER_JOIN);
 
         }
 
         else{
-
-            Log.e("LOG","LOG_QUERY CHANGE PREF Settings");
             String whereClause = MovieContractor.MovieEntry.COLUMN_MOVIE_SETTING + " like ?";
             String value[] = new String[]{preferredOrderMovieSetting};
             asyncRefreshData.setUri(MovieContractor.MovieEntry.buildUriSettingsMovies());
@@ -219,34 +227,42 @@ public class PopularActivityFragment extends Fragment implements SwipeRefreshLay
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String preferredOrderMovieSetting = Utility.getPreferredOrderMovie(getActivity());
-        Uri uri;
         String sortOrder;
         switch (preferredOrderMovieSetting) {
             case "favoriteMovies":
-                Log.e("LOG","LOG_QUERY onCreateLoader favoriteMovies");
-                uri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
+                mUri = MovieContractor.FavoriteEntry.buildFavoriteByIdMovie();
                 sortOrder = MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
-                return new CursorLoader(getContext(), uri, MOVIE_COLUMNS_INNER_JOIN, null, null, sortOrder);
+                return new CursorLoader(getContext(), mUri, MOVIE_COLUMNS_INNER_JOIN, null, null, sortOrder);
             default:
-                Log.e("LOG","LOG_QUERY onCreateLoader Settings");
-                uri = MovieContractor.MovieEntry.buildUriSettingsMovies();
+                mUri = MovieContractor.MovieEntry.buildUriSettingsMovies();
                 String whereClause = MovieContractor.MovieEntry.COLUMN_MOVIE_SETTING +" = ?";
                 String value[] = new String[]{preferredOrderMovieSetting};
                 sortOrder = MovieContractor.MovieEntry.COLUMN_MOVIE_POPULARITY + " DESC";
-                return new CursorLoader(getContext(), uri, MOVIE_COLUMNS, whereClause, value, sortOrder);
+                return new CursorLoader(getContext(), mUri, MOVIE_COLUMNS, whereClause, value, sortOrder);
 
         }
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        List<MovieInformation> movieList = MovieContractor.MovieEntry.getDataFromCursor(data);
-        if(data != null && data.getCount() == 0){
-            queryListFilm();
-        }else{
-            movieAdapter.setData(movieList);
+
+        if(listMovie == null || listMovie.isEmpty()){
+            listMovie = (ArrayList<MovieInformation>) MovieContractor.MovieEntry.getDataFromCursor(data);
+            if(data != null && data.getCount() == 0){
+                queryListFilm();
+            }else{
+                movieAdapter.setData(listMovie);
+            }
         }
 
+
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable("mUri",mUri);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

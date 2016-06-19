@@ -26,14 +26,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.giroux.kevin.androidhttprequestlibrairy.AsyncCursor;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.Constants;
+import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.androidhttprequestlibrairy.constants.TypeMine;
 import com.giroux.kevin.kevingirouxportfolio.R;
-import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
 import com.giroux.kevin.kevingirouxportfolio.adapter.ReviewAdapter;
 import com.giroux.kevin.kevingirouxportfolio.adapter.TrailerAdapter;
-import com.giroux.kevin.androidhttprequestlibrairy.AsyncCursor;
-import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncQueryReview;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncQueryTrailer;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
@@ -44,6 +43,7 @@ import com.giroux.kevin.kevingirouxportfolio.network.MovieFullTask;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieImageDetailsTask;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieReviewsTask;
 import com.giroux.kevin.kevingirouxportfolio.network.MovieTrailerTask;
+import com.giroux.kevin.kevingirouxportfolio.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,7 +157,9 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         super.onCreate(savedInstanceState);
 
 
+
     }
+
 
 
     public DetailsActivityFragment() {
@@ -171,9 +173,17 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
 
         Bundle arguments = getArguments();
+
+
+        if(savedInstanceState != null && savedInstanceState.containsKey("mUri")){
+            mUri = savedInstanceState.getParcelable("mUri");
+            restartLoader();
+        }
+
         if (arguments != null) {
             mUri = arguments.getParcelable(DETAIL_URI);
         }
+
 
         View root = inflater.inflate(R.layout.content_movie_detail, container, false);
         ButterKnife.bind(this, root);
@@ -305,80 +315,88 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
         if (gifImageView != null)
             gifImageView.setImageResource(R.drawable.loadingspinner);
 
+        if(movieInformation == null){
+            List<MovieInformation> informationList = MovieContractor.MovieEntry.getAllDataFromCursor(data);
+            if (!informationList.isEmpty()) {
+                movieInformation = informationList.get(0);
 
-        List<MovieInformation> informationList = MovieContractor.MovieEntry.getAllDataFromCursor(data);
-        if (!informationList.isEmpty()) {
-            movieInformation = informationList.get(0);
+                if (movieInformation.isReviewLoaded()) {
+                    Log.e("LOG","LOG_UPDATE AsyncQueryReview");
+                    String whereClause = MovieContractor.ReviewEntry.COLUMN_REVIEWS_ID_MOVIE + " = ?";
+                    AsyncQueryReview asyncQueryReview = new AsyncQueryReview(getContext());
+                    asyncQueryReview.setValue( new String[]{String.valueOf(movieInformation.getId())});
+                    asyncQueryReview.setUri(MovieContractor.ReviewEntry.CONTENT_URI);
+                    asyncQueryReview.setProjection(REVIEW_ENTRY);
+                    asyncQueryReview.setWhereClause(whereClause);
+                    asyncQueryReview.setMethod(MethodDatabase.QUERY);
+                    asyncQueryReview.setObject("reviewAdapter",reviewAdapter);
+                    asyncQueryReview.execute();
+                } else {
+                    LoadReviews(movieInformation.getId());
+                }
 
-            if (movieInformation.isReviewLoaded()) {
-                Log.e("LOG","LOG_UPDATE AsyncQueryReview");
-                String whereClause = MovieContractor.ReviewEntry.COLUMN_REVIEWS_ID_MOVIE + " = ?";
-                AsyncQueryReview asyncQueryReview = new AsyncQueryReview(getContext());
-                asyncQueryReview.setValue( new String[]{String.valueOf(movieInformation.getId())});
-                asyncQueryReview.setUri(MovieContractor.ReviewEntry.CONTENT_URI);
-                asyncQueryReview.setProjection(REVIEW_ENTRY);
-                asyncQueryReview.setWhereClause(whereClause);
-                asyncQueryReview.setMethod(MethodDatabase.QUERY);
-                asyncQueryReview.setObject("reviewAdapter",reviewAdapter);
-                asyncQueryReview.execute();
-            } else {
-                LoadReviews(movieInformation.getId());
+                if (movieInformation.isTrailerLoaded()) {
+                    Log.e("LOG","LOG_UPDATE asyncQueryTrailer");
+                    String whereClause = MovieContractor.TrailerEntry.COLUMN_TRAILER_MOVIE_ID + "= ?";
+                    AsyncQueryTrailer asyncQueryTrailer = new AsyncQueryTrailer(getContext());
+                    asyncQueryTrailer.setValue( new String[]{String.valueOf(movieInformation.getId())});
+                    asyncQueryTrailer.setUri(MovieContractor.TrailerEntry.CONTENT_URI);
+                    asyncQueryTrailer.setProjection(TRAILER_ENTRY);
+                    asyncQueryTrailer.setWhereClause(whereClause);
+                    asyncQueryTrailer.setMethod(MethodDatabase.QUERY);
+                    asyncQueryTrailer.setObject("trailerAdapter",trailerAdapter);
+                    asyncQueryTrailer.execute();
+
+
+                } else {
+                    LoadTrailer(movieInformation.getId());
+                }
+
+
+
             }
-
-            if (movieInformation.isTrailerLoaded()) {
-                Log.e("LOG","LOG_UPDATE asyncQueryTrailer");
-                String whereClause = MovieContractor.TrailerEntry.COLUMN_TRAILER_MOVIE_ID + "= ?";
-                AsyncQueryTrailer asyncQueryTrailer = new AsyncQueryTrailer(getContext());
-                asyncQueryTrailer.setValue( new String[]{String.valueOf(movieInformation.getId())});
-                asyncQueryTrailer.setUri(MovieContractor.TrailerEntry.CONTENT_URI);
-                asyncQueryTrailer.setProjection(TRAILER_ENTRY);
-                asyncQueryTrailer.setWhereClause(whereClause);
-                asyncQueryTrailer.setMethod(MethodDatabase.QUERY);
-                asyncQueryTrailer.setObject("trailerAdapter",trailerAdapter);
-                asyncQueryTrailer.execute();
-
-
-            } else {
-                LoadTrailer(movieInformation.getId());
-            }
-
-            if (movieInformation.getBackdropPathBitmap() != null) {
-                gifImageView.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getBackdropPathBitmap(), 0, movieInformation.getBackdropPathBitmap().length)).getBitmap());
-            } else {
-                LoadImage();
-            }
-
-            if (movieInformation.getDuration() == 0)
-                LoadMovieDetail(movieInformation.getId());
-            else
-                durationTv.setText(Utility.formatDuration(movieInformation.getDuration()));
-            /* We format informations for adding them to the activity */
-            if (titleTv != null)
-                titleTv.setText(movieInformation.getTitle());
-
-            if (yearTv != null)
-                yearTv.setText(Utility.formatDate(movieInformation.getReleaseDate()));
-
-            if (gifPoster != null && movieInformation.getPosterBitmap() != null) {
-                gifPoster.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getPosterBitmap(), 0, movieInformation.getPosterBitmap().length)).getBitmap());
-            }
-
-            if (ratingTv != null)
-                ratingTv.setText(Utility.formatUserRating(movieInformation.getUserRating()));
-
-            if (markAsFavorite != null && movieInformation.isMarkAsFavorite()) {
-                markAsFavorite.setText(getString(R.string.favoriteMovie));
-            }
-
-            if (synopsisContent != null && movieInformation.getOverView() != null)
-                synopsisContent.setText(movieInformation.getOverView());
-
-            toolbarLayout.setTitle(movieInformation.getTitle());
-            getActivity().setTitle(movieInformation.getTitle());
-
         }
+        updateUI();
+
 
     }
+
+    public void updateUI(){
+        if (movieInformation.getBackdropPathBitmap() != null) {
+            gifImageView.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getBackdropPathBitmap(), 0, movieInformation.getBackdropPathBitmap().length)).getBitmap());
+        } else {
+            LoadImage();
+        }
+
+        if (movieInformation.getDuration() == 0)
+            LoadMovieDetail(movieInformation.getId());
+        else
+            durationTv.setText(Utility.formatDuration(movieInformation.getDuration()));
+            /* We format informations for adding them to the activity */
+        if (titleTv != null)
+            titleTv.setText(movieInformation.getTitle());
+
+        if (yearTv != null)
+            yearTv.setText(Utility.formatDate(movieInformation.getReleaseDate()));
+
+        if (gifPoster != null && movieInformation.getPosterBitmap() != null) {
+            gifPoster.setImageBitmap(new BitmapDrawable(getActivity().getApplicationContext().getResources(), BitmapFactory.decodeByteArray(movieInformation.getPosterBitmap(), 0, movieInformation.getPosterBitmap().length)).getBitmap());
+        }
+
+        if (ratingTv != null)
+            ratingTv.setText(Utility.formatUserRating(movieInformation.getUserRating()));
+
+        if (markAsFavorite != null && movieInformation.isMarkAsFavorite()) {
+            markAsFavorite.setText(getString(R.string.favoriteMovie));
+        }
+
+        if (synopsisContent != null && movieInformation.getOverView() != null)
+            synopsisContent.setText(movieInformation.getOverView());
+
+        toolbarLayout.setTitle(movieInformation.getTitle());
+        getActivity().setTitle(movieInformation.getTitle());
+    }
+
 
 
     @Override
@@ -448,14 +466,21 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+
+        if(mUri != null)
+            outState.putParcelable("mUri",mUri);
         super.onSaveInstanceState(outState);
     }
 
     public void setPreferenceChange() {
-
-
         if(getLoaderManager() != null)
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
 
     }
+
+    public void restartLoader() {
+        getLoaderManager().restartLoader(DETAIL_LOADER,null,this);
+    }
+
+
 }

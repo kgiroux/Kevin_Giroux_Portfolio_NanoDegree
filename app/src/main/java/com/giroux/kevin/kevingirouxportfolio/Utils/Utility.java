@@ -1,4 +1,4 @@
-package com.giroux.kevin.kevingirouxportfolio.Utils;
+package com.giroux.kevin.kevingirouxportfolio.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

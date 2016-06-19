@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.giroux.kevin.kevingirouxportfolio.Utils.Utility;
+import com.giroux.kevin.kevingirouxportfolio.utils.Utility;
 
 /**
  * Created by kevin on 06/06/2016. Kevin Giroux Portfolio
@@ -188,7 +188,6 @@ public class MovieContentProvider extends ContentProvider {
         }
         if(getContext() != null && getContext().getContentResolver() != null)
             getContext().getContentResolver().notifyChange(uri, null);
-        db.close();
         return returnUri;
     }
 
@@ -224,7 +223,6 @@ public class MovieContentProvider extends ContentProvider {
         }
         if (rowsDeleted != 0 && getContext() != null && getContext().getContentResolver() != null)
             getContext().getContentResolver().notifyChange(uri, null);
-        db.close();
         return rowsDeleted;
     }
 
@@ -249,7 +247,6 @@ public class MovieContentProvider extends ContentProvider {
         if (rowsUpdated != 0 && getContext() != null && getContext().getContentResolver() != null) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-        db.close();
         return rowsUpdated;
     }
 
