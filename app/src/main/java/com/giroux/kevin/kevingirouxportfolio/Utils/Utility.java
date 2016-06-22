@@ -19,7 +19,12 @@ import java.util.Locale;
  * Created by kevin on 07/06/2016. Kevin Giroux Portfolio
  */
 
-public class Utility {
+public final class Utility {
+
+    private Utility() throws InstantiationException {
+        throw new InstantiationException();
+    }
+
 
     public static long normaliseDate(long dateToNormalise){
         GregorianCalendar gregorianCalendar = new GregorianCalendar();

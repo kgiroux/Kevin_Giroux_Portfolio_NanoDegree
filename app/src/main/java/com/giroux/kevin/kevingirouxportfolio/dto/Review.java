@@ -59,7 +59,7 @@ public class Review {
 
         if(object.has("results")){
 
-            JSONArray temp = null;
+            JSONArray temp ;
             try {
                 temp = object.getJSONArray("results");
                 for (int i = 0; i<temp.length(); i++){

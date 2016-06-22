@@ -312,13 +312,15 @@ public class DetailsActivityFragment extends Fragment implements LoaderManager.L
 
         Log.i(Constants.TAG_DETAILS_ACTIVITY, "In onLoadFinished");
          /* We bind the ImageView for update the picture when we download the picture */
-        if (gifImageView != null)
+        if (gifImageView != null && movieInformation == null)
             gifImageView.setImageResource(R.drawable.loadingspinner);
 
         if(movieInformation == null){
             List<MovieInformation> informationList = MovieContractor.MovieEntry.getAllDataFromCursor(data);
             if (!informationList.isEmpty()) {
                 movieInformation = informationList.get(0);
+
+
 
                 if (movieInformation.isReviewLoaded()) {
                     Log.e("LOG","LOG_UPDATE AsyncQueryReview");

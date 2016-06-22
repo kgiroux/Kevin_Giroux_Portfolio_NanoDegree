@@ -8,7 +8,6 @@ import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.kevingirouxportfolio.adapter.TrailerAdapter;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncDeleteUpdate;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
-import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.dto.Trailer;
 
 import org.json.JSONObject;

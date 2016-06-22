@@ -26,16 +26,16 @@
         <item>top_rated</item>
         <item>favoriteMovies</item>
     </string-array>
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
-    <string name="apiKey"></string>
+    <string name="apiKey">c31a455f61c0ef7088b1177843ce8372</string>
     <string name="title_activity_popular2">PopularActivity2</string>
     <string name="title_activity_details">DetailsActivity</string>
     <string name="markasfavorite">Mark as Favorite</string>
-    <string name="errorOccured">An error occured</string>
+    <string name="errorOccured">An error occurred</string>
     <string name="favoriteMovie">Favorite Movie</string>
     <string name="popularMovie">Popular Movie</string>
     <string name="synopsis">Synopsis</string>
     <string name="warningIntent">No webbrowser or Youtube app found for performing this action</string>
     <string name="nbRowConcernByDatabaseOperation">Nb row concerned by the operation </string>
+    <string name="logoLaunch">logoLaunch</string>
 
 </resources>

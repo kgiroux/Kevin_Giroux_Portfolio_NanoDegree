@@ -3,7 +3,6 @@ package com.giroux.kevin.kevingirouxportfolio.network;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -49,8 +48,7 @@ public class MovieImageTask extends AndroidHttpRequest {
                 Bitmap image = bitmapDrawable.getBitmap();
                 if(image != null){
                     imageView.setImageBitmap(bitmapDrawable.getBitmap());
-
-                    if(getListObject().get("listMovie") instanceof List){
+                    if(getListObject().get("listMovie") instanceof List<?>){
                         List<MovieInformation> movieInformationList = (List<MovieInformation>) getListObject().get("listMovie");
                         movieInformationList.get(vh.getMPosition()).setPosterBitmap(bytes);
                         // Updating the BLOP field into the database;

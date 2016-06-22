@@ -8,7 +8,6 @@ import com.giroux.kevin.androidhttprequestlibrairy.constants.MethodDatabase;
 import com.giroux.kevin.kevingirouxportfolio.adapter.ReviewAdapter;
 import com.giroux.kevin.kevingirouxportfolio.database.AsyncDeleteUpdate;
 import com.giroux.kevin.kevingirouxportfolio.database.MovieContractor;
-import com.giroux.kevin.kevingirouxportfolio.dto.MovieInformation;
 import com.giroux.kevin.kevingirouxportfolio.dto.Review;
 
 import org.json.JSONObject;
@@ -39,7 +38,6 @@ public class MovieReviewsTask extends AndroidHttpRequest {
 
             int idMovie = (int) this.getListObject().get("idMovie");
             ReviewAdapter adapter = (ReviewAdapter) this.getListObject().get("reviewAdapter");
-            MovieInformation movieInformation = (MovieInformation) this.getListObject().get("movieInformation");
             List<Review> list = Review.getDataFromJson(object,idMovie);
             adapter.setData(list);
             Vector<ContentValues> cVVector = Review.convertListToContentValue(list);

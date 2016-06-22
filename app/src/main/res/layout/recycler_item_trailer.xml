@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageTrailerLaunch"
+        android:contentDescription="@string/logoLaunch"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:src="@drawable/playbutton"
@@ -14,6 +14,7 @@
         android:adjustViewBounds="true" />
 
     <TextView
+        android:textIsSelectable="true"
         android:textColor="@color/colorPrimary"
         android:id="@+id/titleTrailer"
         android:layout_width="0dp"

@@ -5,7 +5,7 @@ package com.giroux.kevin.kevingirouxportfolio.interfaces;
  */
 
 public interface Callback {
-    public void onQueryListInternet();
+    void onQueryListInternet();
 
-    public void restartLoader();
+    void restartLoader();
 }

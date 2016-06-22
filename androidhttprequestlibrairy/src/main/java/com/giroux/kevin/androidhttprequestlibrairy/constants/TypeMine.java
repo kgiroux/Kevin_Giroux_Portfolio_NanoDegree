@@ -59,7 +59,7 @@ public enum TypeMine {
 
     private final String type;
 
-    private TypeMine(String s) {
+    TypeMine(String s) {
         type = s;
     }
 
